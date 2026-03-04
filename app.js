@@ -1,5 +1,5 @@
 /* ============================================
-   FORGE — Weekly Training Program
+   GO TYLER — Weekly Training Program
    App Logic & Data
    ============================================ */
 
