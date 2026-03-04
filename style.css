@@ -1177,11 +1177,31 @@ body {
 }
 
 .spotify-section.open .spotify-player {
-  max-height: 200px;
+  max-height: 250px;
   margin-top: 8px;
 }
 
 .spotify-player iframe {
   display: block;
   border-radius: 12px;
+}
+
+.spotify-open-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 10px 16px;
+  background: #1DB954;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.spotify-open-btn:hover {
+  background: #1ed760;
 }
