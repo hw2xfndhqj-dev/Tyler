@@ -149,6 +149,7 @@ const QUOTES = [
 // ---- State ----
 const STORAGE_KEY = 'forge_completed';
 const STREAK_KEY = 'forge_streak';
+const EX_STORAGE_KEY = 'forge_exercises';
 
 function getCompleted() {
   try {
@@ -160,6 +161,43 @@ function getCompleted() {
 
 function setCompleted(arr) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+}
+
+function getExCompleted(dayIndex) {
+  try {
+    const all = JSON.parse(localStorage.getItem(EX_STORAGE_KEY)) || {};
+    return all[dayIndex] || [];
+  } catch { return []; }
+}
+
+function setExCompleted(dayIndex, exIndices) {
+  try {
+    const all = JSON.parse(localStorage.getItem(EX_STORAGE_KEY)) || {};
+    all[dayIndex] = exIndices;
+    localStorage.setItem(EX_STORAGE_KEY, JSON.stringify(all));
+  } catch {}
+}
+
+function toggleExercise(dayIndex, exIndex) {
+  const done = getExCompleted(dayIndex);
+  const idx = done.indexOf(exIndex);
+  if (idx === -1) { done.push(exIndex); } else { done.splice(idx, 1); }
+  setExCompleted(dayIndex, done);
+
+  // Auto-complete day if all exercises checked
+  const total = WEEK[dayIndex].exercises.length;
+  if (done.length === total) {
+    const completed = getCompleted();
+    if (!completed.includes(dayIndex)) {
+      completed.push(dayIndex);
+      setCompleted(completed);
+      if (completed.length === 7) incrementStreak();
+      updateStats();
+      renderCards();
+    }
+  }
+
+  return done;
 }
 
 function getStreak() {
@@ -388,9 +426,14 @@ function openModal(index) {
   document.getElementById('modalFocus').textContent = w.focus;
 
   const body = document.getElementById('modalBody');
-  body.innerHTML = w.exercises.map((e, i) => `
-    <div class="exercise-row">
-      <div class="exercise-num">${i + 1}</div>
+  const exDone = getExCompleted(index);
+  body.innerHTML = w.exercises.map((e, i) => {
+    const checked = exDone.includes(i);
+    return `
+    <div class="exercise-row ${checked ? 'ex-done' : ''}" data-ex="${i}">
+      <div class="exercise-check ${checked ? 'checked' : ''}" data-day="${index}" data-ex="${i}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
       <div class="ex-anim-wrap">${getExerciseAnim(e.name)}</div>
       <div class="exercise-info">
         <div class="exercise-name">${e.name}</div>
@@ -398,7 +441,29 @@ function openModal(index) {
       </div>
       <span class="exercise-muscle">${e.muscle}</span>
     </div>
-  `).join('');
+  `}).join('') + `<div class="modal-exercise-progress">${exDone.length}/${w.exercises.length} exercises done</div>`;
+
+  // Checkbox click handlers
+  body.querySelectorAll('.exercise-check').forEach(cb => {
+    cb.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const dayIdx = Number(cb.dataset.day);
+      const exIdx = Number(cb.dataset.ex);
+      const done = toggleExercise(dayIdx, exIdx);
+      const isChecked = done.includes(exIdx);
+      cb.classList.toggle('checked', isChecked);
+      cb.closest('.exercise-row').classList.toggle('ex-done', isChecked);
+      // Update progress text
+      const prog = body.querySelector('.modal-exercise-progress');
+      if (prog) prog.textContent = `${done.length}/${WEEK[dayIdx].exercises.length} exercises done`;
+      // Update button if all done
+      if (done.length === WEEK[dayIdx].exercises.length) {
+        const btn = document.getElementById('btnComplete');
+        btn.innerHTML = `${svgIcon('check')} <span>Completed!</span>`;
+        btn.classList.add('done');
+      }
+    });
+  });
 
   const btn = document.getElementById('btnComplete');
   if (isDone) {
@@ -460,6 +525,7 @@ function updateStats() {
 function resetProgress() {
   if (confirm('Reset all progress for this week? This cannot be undone.')) {
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(EX_STORAGE_KEY);
     updateStats();
     renderCards();
   }

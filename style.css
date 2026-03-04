@@ -637,6 +637,54 @@ body {
   flex-shrink: 0;
 }
 
+/* Exercise Checkbox */
+.exercise-check {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid var(--border-hover);
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  color: transparent;
+}
+.exercise-check:hover {
+  border-color: var(--green);
+  background: rgba(52, 211, 153, 0.1);
+}
+.exercise-check.checked {
+  background: var(--green);
+  border-color: var(--green);
+  color: #0a0a0f;
+  transform: scale(1.1);
+}
+.exercise-check.checked svg {
+  animation: checkPop 0.3s ease;
+}
+.exercise-row.ex-done {
+  opacity: 0.5;
+}
+.exercise-row.ex-done .exercise-name {
+  text-decoration: line-through;
+  text-decoration-color: var(--green);
+}
+@keyframes checkPop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+.modal-exercise-progress {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 8px 0 0;
+  letter-spacing: 1px;
+}
+
 /* Modal Footer */
 .modal-footer {
   padding: 20px 32px;
