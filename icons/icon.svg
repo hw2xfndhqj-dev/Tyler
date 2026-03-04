@@ -6,7 +6,11 @@
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="96" fill="url(#bg)"/>
-  <path d="M128 256L256 128L384 256L256 384L128 256Z" stroke="white" stroke-width="24" stroke-linejoin="round" fill="none"/>
-  <path d="M256 192V320" stroke="white" stroke-width="24" stroke-linecap="round"/>
-  <path d="M192 256H320" stroke="white" stroke-width="24" stroke-linecap="round"/>
+  <ellipse cx="190" cy="130" rx="48" ry="72" fill="white" opacity="0.9" transform="rotate(-15 190 130)"/>
+  <ellipse cx="322" cy="130" rx="48" ry="72" fill="white" opacity="0.9" transform="rotate(15 322 130)"/>
+  <ellipse cx="256" cy="300" rx="140" ry="126" fill="white"/>
+  <ellipse cx="216" cy="274" rx="24" ry="28" fill="#1a1a2e"/>
+  <ellipse cx="296" cy="274" rx="24" ry="28" fill="#1a1a2e"/>
+  <ellipse cx="256" cy="322" rx="30" ry="22" fill="#1a1a2e"/>
+  <path d="M238 358 Q256 382 274 358" stroke="#1a1a2e" stroke-width="8" fill="none" stroke-linecap="round"/>
 </svg>
