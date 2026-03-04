@@ -345,6 +345,11 @@ document.addEventListener('keydown', (e) => {
 });
 document.getElementById('resetBtn').addEventListener('click', resetProgress);
 
+// ---- Service Worker (PWA) ----
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js');
+}
+
 // ---- Init ----
 renderCards();
 updateStats();
