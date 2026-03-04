@@ -134,8 +134,8 @@ body {
   height: 42px;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, var(--accent), var(--pink));
   border-radius: var(--radius-sm);
+  overflow: hidden;
   color: #fff;
 }
 
