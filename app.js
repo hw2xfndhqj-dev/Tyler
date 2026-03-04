@@ -556,8 +556,8 @@ if ('serviceWorker' in navigator) {
 }
 
 // ---- Spotify Toggle ----
-document.getElementById('spotifyToggle').addEventListener('click', () => {
-  document.querySelector('.spotify-section').classList.toggle('open');
+document.getElementById('musicToggle').addEventListener('click', () => {
+  document.querySelector('.music-section').classList.toggle('open');
 });
 
 // ---- Init ----

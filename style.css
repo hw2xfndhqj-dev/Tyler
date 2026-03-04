@@ -1134,13 +1134,13 @@ body {
 }
 
 /* ---- Spotify Player ---- */
-.spotify-section {
+.music-section {
   max-width: 700px;
   margin: 0 auto 2rem;
   padding: 0 1rem;
 }
 
-.spotify-header {
+.music-header {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1157,51 +1157,31 @@ body {
   color: var(--text);
 }
 
-.spotify-header:hover {
+.music-header:hover {
   background: var(--surface-hover);
 }
 
-.spotify-chevron {
+.music-chevron {
   margin-left: auto;
   transition: transform 0.3s;
 }
 
-.spotify-section.open .spotify-chevron {
+.music-section.open .music-chevron {
   transform: rotate(180deg);
 }
 
-.spotify-player {
+.music-player {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease;
 }
 
-.spotify-section.open .spotify-player {
-  max-height: 250px;
+.music-section.open .music-player {
+  max-height: 260px;
   margin-top: 8px;
 }
 
-.spotify-player iframe {
+.music-player iframe {
   display: block;
   border-radius: 12px;
-}
-
-.spotify-open-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 8px;
-  padding: 10px 16px;
-  background: #1DB954;
-  color: #fff;
-  font-size: 0.85rem;
-  font-weight: 600;
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  transition: background 0.2s;
-}
-
-.spotify-open-btn:hover {
-  background: #1ed760;
 }
