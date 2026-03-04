@@ -770,3 +770,297 @@ body {
   0% { transform: scale(0) rotate(0); opacity: 1; }
   100% { transform: scale(1.2) rotate(180deg); opacity: 0; }
 }
+
+/* ---- Exercise Animation Thumbnails ---- */
+.ex-anim-wrap {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: var(--radius-xs);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.ex-anim {
+  width: 44px;
+  height: 44px;
+}
+
+/* Press animation (bench/incline) — bar moves up and down */
+@keyframes press-move {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.anim-press { animation: press-move 1.6s ease-in-out infinite; }
+
+/* Fly animation — arms sweep in and out */
+@keyframes fly-move {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(8deg); }
+}
+.anim-fly { animation: fly-move 1.8s ease-in-out infinite; transform-origin: 30px 28px; }
+
+/* Dip animation — body moves up and down */
+@keyframes dip-move {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+.anim-dip { animation: dip-move 1.6s ease-in-out infinite; }
+
+/* Pushdown animation — arms push down */
+@keyframes pushdown-move {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+.anim-pushdown { animation: pushdown-move 1.4s ease-in-out infinite; }
+
+/* Overhead extension — weight goes behind head */
+@keyframes overhead-move {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(4px) rotate(-8deg); }
+}
+.anim-overhead { animation: overhead-move 1.6s ease-in-out infinite; transform-origin: 30px 30px; }
+
+/* Push-up animation — body goes up and down */
+@keyframes pushup-move {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(6px) rotate(2deg); }
+}
+.anim-pushup { animation: pushup-move 1.5s ease-in-out infinite; transform-origin: 14px 50px; }
+
+/* Deadlift — body stands up */
+@keyframes deadlift-move {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-4px) rotate(-6deg); }
+}
+.anim-deadlift { animation: deadlift-move 2s ease-in-out infinite; transform-origin: 30px 48px; }
+
+/* Pull-up — body goes up */
+@keyframes pullup-move {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.anim-pullup { animation: pullup-move 1.8s ease-in-out infinite; }
+
+/* Row — arms pull in */
+@keyframes row-move {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-4px); }
+}
+.anim-row { animation: row-move 1.5s ease-in-out infinite; }
+
+/* Face pull — pull to face */
+@keyframes facepull-move {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+.anim-facepull { animation: facepull-move 1.5s ease-in-out infinite; }
+
+/* Curl — forearms curl up */
+@keyframes curl-move {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(-12deg); }
+}
+.anim-curl { animation: curl-move 1.4s ease-in-out infinite; transform-origin: 30px 24px; }
+
+/* Squat — body squats down */
+@keyframes squat-move {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(6px) scaleY(0.88); }
+}
+.anim-squat { animation: squat-move 1.8s ease-in-out infinite; transform-origin: 30px 54px; }
+
+/* Leg press — legs push out */
+@keyframes legpress-move {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+.anim-legpress { animation: legpress-move 1.6s ease-in-out infinite; }
+
+/* Lunge — body dips down */
+@keyframes lunge-move {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+.anim-lunge { animation: lunge-move 1.6s ease-in-out infinite; }
+
+/* Leg curl — leg curls up */
+@keyframes legcurl-move {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(-20deg); }
+}
+.anim-legcurl { animation: legcurl-move 1.4s ease-in-out infinite; transform-origin: 20px 28px; }
+
+/* Hip thrust — hips push up */
+@keyframes hipthrust-move {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-4px) rotate(-4deg); }
+}
+.anim-hipthrust { animation: hipthrust-move 1.5s ease-in-out infinite; transform-origin: 18px 40px; }
+
+/* Calf raise — body rises on toes */
+@keyframes calfraise-move {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.anim-calfraise { animation: calfraise-move 1.2s ease-in-out infinite; }
+
+/* Overhead press — bar goes up */
+@keyframes ohp-move {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.anim-ohp { animation: ohp-move 1.6s ease-in-out infinite; }
+
+/* Lateral raise — arms go out */
+@keyframes lateral-move {
+  0%, 100% { transform: rotate(0); }
+  30% { transform: rotate(-6deg); }
+  70% { transform: rotate(6deg); }
+}
+.anim-lateral { animation: lateral-move 2s ease-in-out infinite; transform-origin: 30px 24px; }
+
+/* Crunch — body curls up */
+@keyframes crunch-move {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(8deg); }
+}
+.anim-crunch { animation: crunch-move 1.6s ease-in-out infinite; transform-origin: 30px 46px; }
+
+/* Leg raise — legs swing up */
+@keyframes legraise-move {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(15deg); }
+}
+.anim-legraise { animation: legraise-move 1.8s ease-in-out infinite; transform-origin: 30px 20px; }
+
+/* Plank — subtle hold wobble */
+@keyframes plank-move {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.5px); }
+}
+.anim-plank { animation: plank-move 2s ease-in-out infinite; }
+
+/* Power clean — explosive pull */
+@keyframes clean-move {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(6px); }
+  60% { transform: translateY(-6px); }
+}
+.anim-clean { animation: clean-move 1.8s ease-in-out infinite; }
+
+/* Walk/Farmer walk — gentle sway */
+@keyframes walk-move {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  25% { transform: translateX(2px) rotate(1deg); }
+  75% { transform: translateX(-2px) rotate(-1deg); }
+}
+.anim-walk { animation: walk-move 1.2s ease-in-out infinite; }
+
+/* Box jump — jump up */
+@keyframes jump-move {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(4px); }
+  60% { transform: translateY(-10px); }
+}
+.anim-jump { animation: jump-move 1.6s ease-in-out infinite; }
+
+/* Battle ropes — wave motion */
+@keyframes rope-wave-l {
+  0%, 100% { d: path("M24,24 Q16,30 14,40 Q12,48 8,54"); }
+  50% { d: path("M24,24 Q16,22 14,32 Q12,42 8,54"); }
+}
+@keyframes rope-wave-r {
+  0%, 100% { d: path("M36,24 Q44,30 46,40 Q48,48 52,54"); }
+  50% { d: path("M36,24 Q44,22 46,32 Q48,42 52,54"); }
+}
+.anim-rope-l { animation: rope-wave-l 0.6s ease-in-out infinite; }
+.anim-rope-r { animation: rope-wave-r 0.6s ease-in-out infinite alternate; }
+
+/* Sprint — running motion */
+@keyframes sprint-move {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  25% { transform: translateX(2px) rotate(2deg); }
+  75% { transform: translateX(-2px) rotate(-2deg); }
+}
+.anim-sprint { animation: sprint-move 0.6s ease-in-out infinite; }
+
+/* Burpee — up and down */
+@keyframes burpee-move {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  30% { transform: translateY(10px) scaleY(0.7); }
+  60% { transform: translateY(-6px) scaleY(1.05); }
+}
+.anim-burpee { animation: burpee-move 1.8s ease-in-out infinite; }
+
+/* Mountain climber — knee drive */
+@keyframes mtnclimb-move {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(4deg); }
+}
+.anim-mtnclimb { animation: mtnclimb-move 0.8s ease-in-out infinite; transform-origin: 46px 40px; }
+
+/* Kettlebell swing — pendulum */
+@keyframes kbswing-move {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-14px) rotate(-10deg); }
+}
+.anim-kbswing { animation: kbswing-move 1.4s ease-in-out infinite; transform-origin: 30px 28px; }
+
+/* Rowing machine — pull */
+@keyframes rowmachine-move {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-6px); }
+}
+.anim-rowmachine { animation: rowmachine-move 1.6s ease-in-out infinite; }
+
+/* Yoga — gentle sway */
+@keyframes yoga-move {
+  0%, 100% { transform: rotate(0); }
+  33% { transform: rotate(3deg); }
+  66% { transform: rotate(-3deg); }
+}
+.anim-yoga { animation: yoga-move 3s ease-in-out infinite; transform-origin: 30px 36px; }
+
+/* Foam roll — roll back and forth */
+@keyframes foamroll-move {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+.anim-foamroll { animation: foamroll-move 2s ease-in-out infinite; }
+
+/* Stretch — gentle reach */
+@keyframes stretch-move {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.04); }
+}
+.anim-stretch { animation: stretch-move 2.5s ease-in-out infinite; transform-origin: 30px 34px; }
+
+/* Breathing — circle expands/contracts */
+@keyframes breathe-move {
+  0%, 100% { r: 6; opacity: 0.3; }
+  50% { r: 12; opacity: 0.6; }
+}
+.anim-breathe { animation: breathe-move 3s ease-in-out infinite; }
+
+/* Meditation — subtle float */
+@keyframes meditate-move {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.anim-meditate { animation: meditate-move 3s ease-in-out infinite; }
+
+/* Responsive: smaller animation on small screens */
+@media (max-width: 480px) {
+  .ex-anim-wrap {
+    width: 40px;
+    height: 40px;
+  }
+  .ex-anim {
+    width: 36px;
+    height: 36px;
+  }
+}
