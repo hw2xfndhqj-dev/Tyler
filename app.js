@@ -295,12 +295,7 @@ function markComplete(index) {
 
   updateStats();
   renderCards();
-
-  // Update modal button
-  const btn = document.getElementById('btnComplete');
-  btn.innerHTML = `${svgIcon('check')} <span>Completed!</span>`;
-  btn.classList.add('done');
-  btn.onclick = null;
+  closeModal();
 }
 
 // ---- Stats ----
