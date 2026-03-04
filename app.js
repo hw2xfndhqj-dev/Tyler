@@ -555,6 +555,11 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js');
 }
 
+// ---- Spotify Toggle ----
+document.getElementById('spotifyToggle').addEventListener('click', () => {
+  document.querySelector('.spotify-section').classList.toggle('open');
+});
+
 // ---- Init ----
 renderCards();
 updateStats();
