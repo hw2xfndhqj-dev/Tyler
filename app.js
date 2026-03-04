@@ -439,6 +439,9 @@ function openModal(index) {
         <div class="exercise-name">${e.name}</div>
         <div class="exercise-detail">${e.detail}</div>
       </div>
+      <button class="btn-demo" onclick="event.stopPropagation();window.open('https://www.youtube.com/results?search_query='+encodeURIComponent('${e.name.replace(/'/g, "\\'")} proper form tutorial'),'_blank')" title="Watch demo">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.582 6.186a2.506 2.506 0 0 0-1.768-1.768C18.254 4 12 4 12 4s-6.254 0-7.814.418A2.506 2.506 0 0 0 2.418 6.186C2 7.746 2 12 2 12s0 4.254.418 5.814a2.506 2.506 0 0 0 1.768 1.768C5.746 20 12 20 12 20s6.254 0 7.814-.418a2.506 2.506 0 0 0 1.768-1.768C22 16.254 22 12 22 12s0-4.254-.418-5.814zM10 15.464V8.536L16 12l-6 3.464z"/></svg>
+      </button>
       <span class="exercise-muscle">${e.muscle}</span>
     </div>
   `}).join('') + `<div class="modal-exercise-progress">${exDone.length}/${w.exercises.length} exercises done</div>`;

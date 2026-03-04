@@ -637,6 +637,26 @@ body {
   flex-shrink: 0;
 }
 
+.btn-demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 0, 0, 0.12);
+  color: #ff4444;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-demo:hover {
+  background: rgba(255, 0, 0, 0.25);
+  color: #ff2222;
+  transform: scale(1.1);
+}
+
 /* Exercise Checkbox */
 .exercise-check {
   width: 28px;
