@@ -1,0 +1,245 @@
+{
+  "name": "RAG — Ingestion de Documents",
+  "nodes": [
+    {
+      "id": "11111111-0001-0001-0001-111111111111",
+      "name": "Déclencheur Manuel",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "parameters": {}
+    },
+    {
+      "id": "11111111-0002-0002-0002-111111111112",
+      "name": "Données du Document",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-001",
+              "name": "text",
+              "value": "Collez ici le texte de votre document. Ce champ sera divisé en chunks et indexé dans Qdrant pour la recherche sémantique.",
+              "type": "string"
+            },
+            {
+              "id": "field-002",
+              "name": "source",
+              "value": "document-source",
+              "type": "string"
+            },
+            {
+              "id": "field-003",
+              "name": "collection",
+              "value": "rag-documents",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "11111111-0003-0003-0003-111111111113",
+      "name": "Qdrant — Insertion",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1,
+      "position": [700, 300],
+      "parameters": {
+        "mode": "insert",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "={{ $json.collection }}",
+          "mode": "id"
+        },
+        "options": {
+          "clearStore": false
+        }
+      },
+      "credentials": {
+        "qdrantApi": {
+          "id": "QDRANT_CREDENTIAL_ID",
+          "name": "Qdrant API"
+        }
+      }
+    },
+    {
+      "id": "11111111-0004-0004-0004-111111111114",
+      "name": "OpenAI Embeddings",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [700, 480],
+      "parameters": {
+        "model": "text-embedding-3-small",
+        "options": {}
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "id": "11111111-0005-0005-0005-111111111115",
+      "name": "Chargeur de Document",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [580, 480],
+      "parameters": {
+        "dataType": "json",
+        "jsonData": "={{ $json.text }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "source",
+                "value": "={{ $json.source }}"
+              },
+              {
+                "name": "ingested_at",
+                "value": "={{ $now.toISO() }}"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "11111111-0006-0006-0006-111111111116",
+      "name": "Découpage de Texte",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [460, 480],
+      "parameters": {
+        "chunkSize": 1000,
+        "chunkOverlap": 200,
+        "options": {}
+      }
+    },
+    {
+      "id": "11111111-0007-0007-0007-111111111117",
+      "name": "Résultat d'Ingestion",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [940, 300],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "result-001",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "result-002",
+              "name": "message",
+              "value": "Document indexé dans Qdrant avec succès",
+              "type": "string"
+            },
+            {
+              "id": "result-003",
+              "name": "timestamp",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Déclencheur Manuel": {
+      "main": [
+        [
+          {
+            "node": "Données du Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Données du Document": {
+      "main": [
+        [
+          {
+            "node": "Qdrant — Insertion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant — Insertion": {
+      "main": [
+        [
+          {
+            "node": "Résultat d'Ingestion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Embeddings": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant — Insertion",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chargeur de Document": {
+      "ai_document": [
+        [
+          {
+            "node": "Qdrant — Insertion",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Découpage de Texte": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Chargeur de Document",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": ""
+  },
+  "pinData": {},
+  "versionId": "",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2026-03-04T00:00:00.000Z",
+      "updatedAt": "2026-03-04T00:00:00.000Z",
+      "id": "tag-rag",
+      "name": "RAG"
+    }
+  ]
+}

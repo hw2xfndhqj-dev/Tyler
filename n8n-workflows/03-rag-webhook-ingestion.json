@@ -1,0 +1,274 @@
+{
+  "name": "RAG — Ingestion via Webhook (API)",
+  "nodes": [
+    {
+      "id": "33333333-0001-0001-0001-333333333331",
+      "name": "Webhook POST",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "rag-ingestion-webhook",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rag/ingest",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": false
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "HEADER_AUTH_CREDENTIAL_ID",
+          "name": "RAG Ingestion API Key"
+        }
+      }
+    },
+    {
+      "id": "33333333-0002-0002-0002-333333333332",
+      "name": "Valider la Requête",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [460, 300],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-001",
+              "leftValue": "={{ $json.body.text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "33333333-0003-0003-0003-333333333333",
+      "name": "Qdrant — Insertion Webhook",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1,
+      "position": [700, 220],
+      "parameters": {
+        "mode": "insert",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "={{ $json.body.collection || 'rag-documents' }}",
+          "mode": "id"
+        },
+        "options": {
+          "clearStore": false
+        }
+      },
+      "credentials": {
+        "qdrantApi": {
+          "id": "QDRANT_CREDENTIAL_ID",
+          "name": "Qdrant API"
+        }
+      }
+    },
+    {
+      "id": "33333333-0004-0004-0004-333333333334",
+      "name": "OpenAI Embeddings — Ingestion",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [700, 400],
+      "parameters": {
+        "model": "text-embedding-3-small",
+        "options": {}
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "id": "33333333-0005-0005-0005-333333333335",
+      "name": "Chargeur JSON",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [580, 400],
+      "parameters": {
+        "dataType": "json",
+        "jsonData": "={{ $json.body.text }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "source",
+                "value": "={{ $json.body.source || 'api-upload' }}"
+              },
+              {
+                "name": "title",
+                "value": "={{ $json.body.title || 'Document sans titre' }}"
+              },
+              {
+                "name": "author",
+                "value": "={{ $json.body.author || 'Inconnu' }}"
+              },
+              {
+                "name": "ingested_at",
+                "value": "={{ $now.toISO() }}"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "33333333-0006-0006-0006-333333333336",
+      "name": "Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [460, 400],
+      "parameters": {
+        "chunkSize": "={{ $json.body.chunk_size || 1000 }}",
+        "chunkOverlap": "={{ $json.body.chunk_overlap || 200 }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "33333333-0007-0007-0007-333333333337",
+      "name": "Réponse Succès",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [940, 220],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": \"Document indexé avec succès\",\n  \"collection\": \"{{ $('Valider la Requête').item.json.body.collection || 'rag-documents' }}\",\n  \"timestamp\": \"{{ $now.toISO() }}\"\n}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "33333333-0008-0008-0008-333333333338",
+      "name": "Réponse Erreur Validation",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [700, 380],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"error\": \"Le champ 'text' est requis dans le corps de la requête\"\n}",
+        "options": {
+          "responseCode": 400
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook POST": {
+      "main": [
+        [
+          {
+            "node": "Valider la Requête",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valider la Requête": {
+      "main": [
+        [
+          {
+            "node": "Qdrant — Insertion Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Réponse Erreur Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant — Insertion Webhook": {
+      "main": [
+        [
+          {
+            "node": "Réponse Succès",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Embeddings — Ingestion": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant — Insertion Webhook",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chargeur JSON": {
+      "ai_document": [
+        [
+          {
+            "node": "Qdrant — Insertion Webhook",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Chargeur JSON",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": ""
+  },
+  "pinData": {},
+  "versionId": "",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2026-03-04T00:00:00.000Z",
+      "updatedAt": "2026-03-04T00:00:00.000Z",
+      "id": "tag-rag",
+      "name": "RAG"
+    },
+    {
+      "createdAt": "2026-03-04T00:00:00.000Z",
+      "updatedAt": "2026-03-04T00:00:00.000Z",
+      "id": "tag-webhook",
+      "name": "Webhook"
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "name": "RAG — Agent Chat (Claude + Qdrant)",
+  "nodes": [
+    {
+      "id": "22222222-0001-0001-0001-222222222221",
+      "name": "Chat Trigger",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "webhookId": "rag-chat-webhook-id",
+      "parameters": {
+        "options": {
+          "title": "Assistant RAG",
+          "subtitle": "Posez vos questions sur vos documents",
+          "inputPlaceholder": "Votre question...",
+          "loadPreviousSession": "memory",
+          "showWelcomeScreen": true
+        }
+      }
+    },
+    {
+      "id": "22222222-0002-0002-0002-222222222222",
+      "name": "Agent RAG",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [480, 300],
+      "parameters": {
+        "agent": "toolsAgent",
+        "options": {
+          "systemMessage": "Tu es un assistant IA expert qui répond aux questions en te basant UNIQUEMENT sur les documents fournis dans ta base de connaissances.\n\nRègles importantes :\n1. Utilise toujours l'outil de recherche pour trouver des informations pertinentes avant de répondre\n2. Si tu ne trouves pas d'information dans les documents, dis-le clairement\n3. Cite les sources quand c'est possible\n4. Réponds en français sauf si l'utilisateur pose sa question dans une autre langue\n5. Sois précis, concis et utile\n\nDate actuelle : {{ $now.format('dd/MM/yyyy') }}",
+          "maxIterations": 5,
+          "returnIntermediateSteps": false
+        }
+      }
+    },
+    {
+      "id": "22222222-0003-0003-0003-222222222223",
+      "name": "Claude claude-sonnet-4-6",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [360, 500],
+      "parameters": {
+        "model": "claude-sonnet-4-6",
+        "options": {
+          "temperature": 0.3,
+          "maxTokensToSample": 4096
+        }
+      },
+      "credentials": {
+        "anthropicApi": {
+          "id": "ANTHROPIC_CREDENTIAL_ID",
+          "name": "Anthropic API"
+        }
+      }
+    },
+    {
+      "id": "22222222-0004-0004-0004-222222222224",
+      "name": "Mémoire Conversationnelle",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [480, 500],
+      "parameters": {
+        "sessionKey": "={{ $json.sessionId }}",
+        "contextWindowLength": 10
+      }
+    },
+    {
+      "id": "22222222-0005-0005-0005-222222222225",
+      "name": "Outil Recherche Documentaire",
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [600, 500],
+      "parameters": {
+        "name": "recherche_documentaire",
+        "description": "Recherche des informations pertinentes dans la base de connaissances documentaire. Utilise cet outil pour répondre aux questions factuelles basées sur les documents disponibles.",
+        "topK": 5
+      }
+    },
+    {
+      "id": "22222222-0006-0006-0006-222222222226",
+      "name": "Qdrant — Recherche",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1,
+      "position": [600, 680],
+      "parameters": {
+        "mode": "retrieve",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "rag-documents",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "credentials": {
+        "qdrantApi": {
+          "id": "QDRANT_CREDENTIAL_ID",
+          "name": "Qdrant API"
+        }
+      }
+    },
+    {
+      "id": "22222222-0007-0007-0007-222222222227",
+      "name": "OpenAI Embeddings — Requête",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [720, 680],
+      "parameters": {
+        "model": "text-embedding-3-small",
+        "options": {}
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Chat Trigger": {
+      "main": [
+        [
+          {
+            "node": "Agent RAG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude claude-sonnet-4-6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agent RAG",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mémoire Conversationnelle": {
+      "ai_memory": [
+        [
+          {
+            "node": "Agent RAG",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Outil Recherche Documentaire": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agent RAG",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant — Recherche": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Outil Recherche Documentaire",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Embeddings — Requête": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant — Recherche",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": ""
+  },
+  "pinData": {},
+  "versionId": "",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2026-03-04T00:00:00.000Z",
+      "updatedAt": "2026-03-04T00:00:00.000Z",
+      "id": "tag-rag",
+      "name": "RAG"
+    },
+    {
+      "createdAt": "2026-03-04T00:00:00.000Z",
+      "updatedAt": "2026-03-04T00:00:00.000Z",
+      "id": "tag-agent",
+      "name": "Agent"
+    }
+  ]
+}
