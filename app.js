@@ -126,43 +126,386 @@ const EXERCISE_ANIM_MAP = {
 };
 
 function getExerciseSVG(key) {
+  // High-quality SVG animations with muscle highlights, joints, and equipment
+  const C = { body: '#e0dfe8', joint: '#b0afc0', muscle: '#7c5cfc', muscle2: '#a78bfa', equip: '#60a5fa', equipDark: '#3b82f6', bench: '#374151', glow: 'rgba(124,92,252,0.25)', red: '#f87171', green: '#34d399', pink: '#f472b6', yellow: '#fbbf24', cyan: '#22d3ee' };
+  const joint = (cx, cy, r=2.5) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${C.joint}"/>`;
+  const head = (cx, cy) => `<circle cx="${cx}" cy="${cy}" r="7" fill="${C.body}" opacity="0.9"/><circle cx="${cx-2}" cy="${cy-1}" r="1" fill="${C.joint}"/><circle cx="${cx+2}" cy="${cy-1}" r="1" fill="${C.joint}"/>`;
   const svgs = {
-    press: `<svg class="ex-anim" viewBox="0 0 60 60"><line x1="30" y1="48" x2="30" y2="26" stroke="#f0f0f5" stroke-width="2.5" stroke-linecap="round"/><circle cx="30" cy="20" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="16" y1="14" x2="44" y2="14" stroke="#7c5cfc" stroke-width="3" stroke-linecap="round" class="anim-press"/><line x1="22" y1="30" x2="16" y2="14" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="38" y1="30" x2="44" y2="14" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="24" y1="48" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="36" y1="48" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/></svg>`,
-    fly: `<svg class="ex-anim" viewBox="0 0 60 60"><line x1="30" y1="48" x2="30" y2="26" stroke="#f0f0f5" stroke-width="2.5"/><circle cx="30" cy="20" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="30" x2="14" y2="24" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round" class="anim-fly"/><line x1="30" y1="30" x2="46" y2="24" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="24" y1="48" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="48" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    dip: `<svg class="ex-anim anim-dip" viewBox="0 0 60 60"><rect x="8" y="24" width="44" height="3" rx="1.5" fill="#555568"/><circle cx="30" cy="16" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="22" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="28" x2="20" y2="24" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="28" x2="40" y2="24" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="24" y1="50" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="50" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    pushdown: `<svg class="ex-anim" viewBox="0 0 60 60"><line x1="30" y1="48" x2="30" y2="24" stroke="#f0f0f5" stroke-width="2.5"/><circle cx="30" cy="18" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="28" x2="22" y2="38" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round" class="anim-pushdown"/><line x1="30" y1="28" x2="38" y2="38" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round" class="anim-pushdown"/><line x1="24" y1="48" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="48" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    overhead: `<svg class="ex-anim" viewBox="0 0 60 60"><line x1="30" y1="48" x2="30" y2="24" stroke="#f0f0f5" stroke-width="2.5"/><circle cx="30" cy="18" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="26" x2="24" y2="10" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="26" x2="36" y2="10" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="8" r="3" fill="#7c5cfc" class="anim-overhead"/><line x1="24" y1="48" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="48" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    pushup: `<svg class="ex-anim anim-pushup" viewBox="0 0 60 60"><circle cx="14" cy="28" r="5" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="18" y1="32" x2="44" y2="38" stroke="#f0f0f5" stroke-width="2.5" stroke-linecap="round"/><line x1="18" y1="36" x2="14" y2="46" stroke="#f0f0f5" stroke-width="2"/><line x1="44" y1="38" x2="46" y2="50" stroke="#f0f0f5" stroke-width="2"/><line x1="44" y1="38" x2="40" y2="50" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    deadlift: `<svg class="ex-anim anim-deadlift" viewBox="0 0 60 60"><circle cx="30" cy="14" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="20" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="30" x2="20" y2="44" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="30" x2="40" y2="44" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="24" y1="54" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="54" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/><line x1="14" y1="44" x2="46" y2="44" stroke="#7c5cfc" stroke-width="3" stroke-linecap="round"/></svg>`,
-    pullup: `<svg class="ex-anim anim-pullup" viewBox="0 0 60 60"><line x1="10" y1="8" x2="50" y2="8" stroke="#555568" stroke-width="3" stroke-linecap="round"/><circle cx="30" cy="18" r="5" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="23" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2.5"/><line x1="26" y1="10" x2="24" y2="24" stroke="#f0f0f5" stroke-width="2"/><line x1="34" y1="10" x2="36" y2="24" stroke="#f0f0f5" stroke-width="2"/><line x1="24" y1="50" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="50" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    row: `<svg class="ex-anim anim-row" viewBox="0 0 60 60"><circle cx="20" cy="18" r="5" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="24" y1="22" x2="36" y2="34" stroke="#f0f0f5" stroke-width="2.5"/><line x1="36" y1="34" x2="46" y2="26" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="36" y1="34" x2="30" y2="48" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="34" x2="42" y2="48" stroke="#f0f0f5" stroke-width="2"/><line x1="14" y1="48" x2="46" y2="48" stroke="#7c5cfc" stroke-width="3" stroke-linecap="round"/></svg>`,
-    facepull: `<svg class="ex-anim anim-facepull" viewBox="0 0 60 60"><circle cx="30" cy="16" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="22" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="28" x2="18" y2="20" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="28" x2="42" y2="20" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="24" y1="50" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="50" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    curl: `<svg class="ex-anim" viewBox="0 0 60 60"><circle cx="30" cy="16" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="22" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="28" x2="22" y2="36" stroke="#f0f0f5" stroke-width="2"/><line x1="22" y1="36" x2="22" y2="26" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round" class="anim-curl"/><circle cx="22" cy="24" r="3" fill="#7c5cfc" class="anim-curl"/><line x1="30" y1="28" x2="38" y2="36" stroke="#f0f0f5" stroke-width="2"/><line x1="24" y1="50" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="50" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    squat: `<svg class="ex-anim anim-squat" viewBox="0 0 60 60"><circle cx="30" cy="10" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="16" x2="30" y2="34" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="22" x2="20" y2="16" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="22" x2="40" y2="16" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="50" x2="30" y2="34" stroke="#f0f0f5" stroke-width="2"/><line x1="38" y1="50" x2="30" y2="34" stroke="#f0f0f5" stroke-width="2"/><line x1="14" y1="16" x2="46" y2="16" stroke="#7c5cfc" stroke-width="3" stroke-linecap="round"/></svg>`,
-    legpress: `<svg class="ex-anim anim-legpress" viewBox="0 0 60 60"><circle cx="16" cy="24" r="5" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="20" y1="28" x2="26" y2="38" stroke="#f0f0f5" stroke-width="2.5"/><line x1="26" y1="38" x2="40" y2="44" stroke="#f0f0f5" stroke-width="2"/><line x1="26" y1="38" x2="40" y2="36" stroke="#f0f0f5" stroke-width="2"/><rect x="42" y="30" width="6" height="20" rx="2" fill="#7c5cfc" opacity="0.6"/></svg>`,
-    lunge: `<svg class="ex-anim anim-lunge" viewBox="0 0 60 60"><circle cx="30" cy="10" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="16" x2="30" y2="34" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="34" x2="20" y2="50" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="34" x2="42" y2="50" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="24" x2="22" y2="18" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="24" x2="38" y2="18" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    legcurl: `<svg class="ex-anim" viewBox="0 0 60 60"><rect x="8" y="22" width="44" height="4" rx="2" fill="#555568"/><circle cx="16" cy="18" r="4" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="16" y1="22" x2="44" y2="22" stroke="#f0f0f5" stroke-width="2.5"/><line x1="44" y1="22" x2="40" y2="12" stroke="#f0f0f5" stroke-width="2.5" stroke-linecap="round" class="anim-legcurl"/></svg>`,
-    hipthrust: `<svg class="ex-anim anim-hipthrust" viewBox="0 0 60 60"><rect x="6" y="34" width="20" height="4" rx="2" fill="#555568"/><circle cx="14" cy="28" r="5" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="18" y1="32" x2="34" y2="36" stroke="#f0f0f5" stroke-width="2.5"/><line x1="34" y1="36" x2="44" y2="48" stroke="#f0f0f5" stroke-width="2"/><line x1="34" y1="36" x2="24" y2="48" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    calfraise: `<svg class="ex-anim anim-calfraise" viewBox="0 0 60 60"><circle cx="30" cy="10" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="16" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="24" x2="22" y2="20" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="24" x2="38" y2="20" stroke="#f0f0f5" stroke-width="2"/><line x1="28" y1="50" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/><line x1="32" y1="50" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/><rect x="24" y="48" width="12" height="3" rx="1.5" fill="#7c5cfc"/></svg>`,
-    ohp: `<svg class="ex-anim anim-ohp" viewBox="0 0 60 60"><circle cx="30" cy="20" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="26" x2="30" y2="42" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="30" x2="20" y2="12" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="30" x2="40" y2="12" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="14" y1="10" x2="46" y2="10" stroke="#7c5cfc" stroke-width="3" stroke-linecap="round"/><line x1="24" y1="52" x2="30" y2="42" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="52" x2="30" y2="42" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    lateral: `<svg class="ex-anim anim-lateral" viewBox="0 0 60 60"><circle cx="30" cy="14" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="20" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="26" x2="14" y2="28" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="26" x2="46" y2="28" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="28" r="3" fill="#7c5cfc"/><circle cx="48" cy="28" r="3" fill="#7c5cfc"/><line x1="24" y1="50" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="50" x2="30" y2="40" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    crunch: `<svg class="ex-anim anim-crunch" viewBox="0 0 60 60"><circle cx="30" cy="18" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="24" x2="30" y2="42" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="30" x2="22" y2="24" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="30" x2="38" y2="24" stroke="#f0f0f5" stroke-width="2"/><line x1="22" y1="52" x2="30" y2="42" stroke="#f0f0f5" stroke-width="2"/><line x1="38" y1="52" x2="30" y2="42" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    legraise: `<svg class="ex-anim anim-legraise" viewBox="0 0 60 60"><line x1="30" y1="6" x2="30" y2="6" stroke="#555568" stroke-width="4" stroke-linecap="round"/><circle cx="30" cy="14" r="5" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="19" x2="30" y2="34" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="26" x2="22" y2="10" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="26" x2="38" y2="10" stroke="#f0f0f5" stroke-width="2"/><line x1="24" y1="48" x2="30" y2="34" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="48" x2="30" y2="34" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    plank: `<svg class="ex-anim anim-plank" viewBox="0 0 60 60"><circle cx="12" cy="30" r="5" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="16" y1="34" x2="48" y2="36" stroke="#f0f0f5" stroke-width="2.5"/><line x1="16" y1="38" x2="14" y2="46" stroke="#f0f0f5" stroke-width="2"/><line x1="48" y1="36" x2="48" y2="46" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    clean: `<svg class="ex-anim anim-clean" viewBox="0 0 60 60"><circle cx="30" cy="12" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="18" x2="30" y2="36" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="24" x2="22" y2="32" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="24" x2="38" y2="32" stroke="#f0f0f5" stroke-width="2"/><line x1="24" y1="50" x2="30" y2="36" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="50" x2="30" y2="36" stroke="#f0f0f5" stroke-width="2"/><line x1="14" y1="32" x2="46" y2="32" stroke="#7c5cfc" stroke-width="3" stroke-linecap="round"/></svg>`,
-    walk: `<svg class="ex-anim anim-walk" viewBox="0 0 60 60"><circle cx="30" cy="10" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="16" x2="30" y2="36" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="24" x2="20" y2="34" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="24" x2="40" y2="34" stroke="#f0f0f5" stroke-width="2"/><rect x="17" y="32" width="6" height="8" rx="2" fill="#7c5cfc" opacity="0.6"/><rect x="37" y="32" width="6" height="8" rx="2" fill="#7c5cfc" opacity="0.6"/><line x1="24" y1="50" x2="30" y2="36" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="50" x2="30" y2="36" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    jump: `<svg class="ex-anim anim-jump" viewBox="0 0 60 60"><rect x="16" y="40" width="28" height="14" rx="3" fill="#555568"/><circle cx="30" cy="12" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="18" x2="30" y2="32" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="24" x2="22" y2="18" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="24" x2="38" y2="18" stroke="#f0f0f5" stroke-width="2"/><line x1="24" y1="40" x2="30" y2="32" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="40" x2="30" y2="32" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    ropes: `<svg class="ex-anim" viewBox="0 0 60 60"><circle cx="30" cy="14" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="20" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2.5"/><path d="M24,24 Q16,30 14,40 Q12,48 8,54" stroke="#7c5cfc" stroke-width="2.5" fill="none" stroke-linecap="round" class="anim-rope-l"/><path d="M36,24 Q44,30 46,40 Q48,48 52,54" stroke="#7c5cfc" stroke-width="2.5" fill="none" stroke-linecap="round" class="anim-rope-r"/><line x1="24" y1="48" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="48" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    sprint: `<svg class="ex-anim anim-sprint" viewBox="0 0 60 60"><circle cx="24" cy="12" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="26" y1="18" x2="32" y2="34" stroke="#f0f0f5" stroke-width="2.5"/><line x1="28" y1="24" x2="18" y2="20" stroke="#f0f0f5" stroke-width="2"/><line x1="28" y1="24" x2="40" y2="18" stroke="#f0f0f5" stroke-width="2"/><line x1="32" y1="34" x2="22" y2="50" stroke="#f0f0f5" stroke-width="2"/><line x1="32" y1="34" x2="44" y2="46" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    burpee: `<svg class="ex-anim anim-burpee" viewBox="0 0 60 60"><circle cx="30" cy="10" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="16" x2="30" y2="36" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="24" x2="20" y2="18" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="24" x2="40" y2="18" stroke="#f0f0f5" stroke-width="2"/><line x1="24" y1="50" x2="30" y2="36" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="50" x2="30" y2="36" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    mtnclimb: `<svg class="ex-anim anim-mtnclimb" viewBox="0 0 60 60"><circle cx="14" cy="22" r="5" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="18" y1="26" x2="42" y2="34" stroke="#f0f0f5" stroke-width="2.5"/><line x1="18" y1="30" x2="14" y2="40" stroke="#f0f0f5" stroke-width="2"/><line x1="42" y1="34" x2="48" y2="46" stroke="#f0f0f5" stroke-width="2"/><line x1="42" y1="34" x2="30" y2="42" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    kbswing: `<svg class="ex-anim anim-kbswing" viewBox="0 0 60 60"><circle cx="30" cy="14" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="20" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="28" x2="20" y2="36" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="28" x2="40" y2="36" stroke="#f0f0f5" stroke-width="2"/><circle cx="30" cy="40" r="5" fill="#7c5cfc" opacity="0.6"/><line x1="24" y1="50" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/><line x1="36" y1="50" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    rowmachine: `<svg class="ex-anim anim-rowmachine" viewBox="0 0 60 60"><rect x="6" y="40" width="48" height="3" rx="1.5" fill="#555568"/><circle cx="20" cy="28" r="5" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="24" y1="32" x2="32" y2="38" stroke="#f0f0f5" stroke-width="2.5"/><line x1="24" y1="34" x2="16" y2="40" stroke="#f0f0f5" stroke-width="2"/><line x1="32" y1="38" x2="40" y2="40" stroke="#f0f0f5" stroke-width="2"/><line x1="32" y1="38" x2="26" y2="40" stroke="#f0f0f5" stroke-width="2"/><line x1="24" y1="32" x2="38" y2="28" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/></svg>`,
-    stretch: `<svg class="ex-anim anim-stretch" viewBox="0 0 60 60"><circle cx="30" cy="10" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="16" x2="30" y2="36" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="22" x2="16" y2="14" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="22" x2="44" y2="14" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="52" x2="30" y2="36" stroke="#f0f0f5" stroke-width="2"/><line x1="38" y1="52" x2="30" y2="36" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    yoga: `<svg class="ex-anim anim-yoga" viewBox="0 0 60 60"><circle cx="30" cy="12" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="18" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="26" x2="16" y2="30" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="26" x2="44" y2="30" stroke="#f0f0f5" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="52" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/><line x1="38" y1="52" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    foamroll: `<svg class="ex-anim anim-foamroll" viewBox="0 0 60 60"><ellipse cx="30" cy="46" rx="14" ry="5" fill="#7c5cfc" opacity="0.4"/><circle cx="22" cy="30" r="4" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="26" y1="34" x2="42" y2="40" stroke="#f0f0f5" stroke-width="2.5"/><line x1="42" y1="40" x2="44" y2="48" stroke="#f0f0f5" stroke-width="2"/><line x1="42" y1="40" x2="36" y2="48" stroke="#f0f0f5" stroke-width="2"/></svg>`,
-    breathe: `<svg class="ex-anim" viewBox="0 0 60 60"><circle cx="30" cy="30" r="6" fill="none" stroke="#7c5cfc" stroke-width="2" class="anim-breathe"/><circle cx="30" cy="30" r="16" fill="none" stroke="rgba(124,92,252,0.2)" stroke-width="1"/><circle cx="30" cy="18" r="4" fill="none" stroke="#f0f0f5" stroke-width="1.5"/><line x1="30" y1="22" x2="30" y2="28" stroke="#f0f0f5" stroke-width="1.5"/></svg>`,
-    meditate: `<svg class="ex-anim anim-meditate" viewBox="0 0 60 60"><circle cx="30" cy="16" r="6" fill="none" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="22" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2.5"/><line x1="30" y1="30" x2="18" y2="34" stroke="#f0f0f5" stroke-width="2"/><line x1="30" y1="30" x2="42" y2="34" stroke="#f0f0f5" stroke-width="2"/><line x1="22" y1="50" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/><line x1="38" y1="50" x2="30" y2="38" stroke="#f0f0f5" stroke-width="2"/><circle cx="30" cy="30" r="18" fill="none" stroke="rgba(124,92,252,0.15)" stroke-width="1"/></svg>`,
+    press: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <defs><linearGradient id="gP" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${C.muscle}"/><stop offset="100%" stop-color="${C.muscle2}"/></linearGradient></defs>
+      <!-- bench --><rect x="20" y="58" width="60" height="5" rx="2" fill="${C.bench}"/><rect x="35" y="63" width="6" height="14" rx="2" fill="${C.bench}"/><rect x="59" y="63" width="6" height="14" rx="2" fill="${C.bench}"/>
+      <!-- body -->${head(50, 48)}
+      <rect x="42" y="52" width="16" height="10" rx="4" fill="${C.body}" opacity="0.7"/>
+      <!-- chest glow --><ellipse cx="50" cy="54" rx="9" ry="5" fill="${C.glow}" class="anim-breathe"/>
+      <!-- barbell --><g class="anim-press"><line x1="14" y1="38" x2="86" y2="38" stroke="${C.equip}" stroke-width="3" stroke-linecap="round"/><circle cx="14" cy="38" r="5" fill="${C.equipDark}" opacity="0.8"/><circle cx="86" cy="38" r="5" fill="${C.equipDark}" opacity="0.8"/><circle cx="10" cy="38" r="3.5" fill="${C.equipDark}"/><circle cx="90" cy="38" r="3.5" fill="${C.equipDark}"/></g>
+      <!-- arms --><line x1="44" y1="54" x2="30" y2="44" stroke="${C.body}" stroke-width="3.5" stroke-linecap="round" class="anim-press"/>${joint(30, 44)}<line x1="30" y1="44" x2="24" y2="38" stroke="${C.body}" stroke-width="3" stroke-linecap="round" class="anim-press"/>
+      <line x1="56" y1="54" x2="70" y2="44" stroke="${C.body}" stroke-width="3.5" stroke-linecap="round" class="anim-press"/>${joint(70, 44)}<line x1="70" y1="44" x2="76" y2="38" stroke="${C.body}" stroke-width="3" stroke-linecap="round" class="anim-press"/>
+      <!-- legs --><line x1="46" y1="62" x2="36" y2="72" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/>${joint(36,72)}<line x1="36" y1="72" x2="32" y2="77" stroke="${C.body}" stroke-width="2.5"/>
+      <line x1="54" y1="62" x2="64" y2="72" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/>${joint(64,72)}<line x1="64" y1="72" x2="68" y2="77" stroke="${C.body}" stroke-width="2.5"/>
+    </svg>`,
+    fly: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <rect x="22" y="58" width="56" height="5" rx="2" fill="${C.bench}"/>
+      ${head(50, 48)}
+      <rect x="43" y="52" width="14" height="10" rx="4" fill="${C.body}" opacity="0.7"/>
+      <ellipse cx="50" cy="55" rx="10" ry="5" fill="${C.glow}" class="anim-breathe"/>
+      <!-- arms sweep --><g class="anim-fly">
+        <line x1="44" y1="54" x2="22" y2="46" stroke="${C.body}" stroke-width="3.5" stroke-linecap="round"/>${joint(22,46)}<line x1="22" y1="46" x2="14" y2="52" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/><circle cx="12" cy="54" r="3" fill="${C.muscle}" opacity="0.6"/>
+      </g>
+      <g class="anim-fly"><line x1="56" y1="54" x2="78" y2="46" stroke="${C.body}" stroke-width="3.5" stroke-linecap="round"/>${joint(78,46)}<line x1="78" y1="46" x2="86" y2="52" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/><circle cx="88" cy="54" r="3" fill="${C.muscle}" opacity="0.6"/></g>
+      <line x1="46" y1="62" x2="38" y2="74" stroke="${C.body}" stroke-width="3"/><line x1="54" y1="62" x2="62" y2="74" stroke="${C.body}" stroke-width="3"/>
+    </svg>`,
+    dip: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <!-- parallel bars --><rect x="16" y="32" width="68" height="4" rx="2" fill="${C.bench}"/><rect x="16" y="36" width="5" height="40" rx="2" fill="${C.bench}"/><rect x="79" y="36" width="5" height="40" rx="2" fill="${C.bench}"/>
+      <g class="anim-dip">${head(50, 24)}
+        <rect x="43" y="30" width="14" height="16" rx="5" fill="${C.body}" opacity="0.7"/>
+        <!-- tricep glow --><ellipse cx="38" cy="36" rx="4" ry="6" fill="${C.glow}"/><ellipse cx="62" cy="36" rx="4" ry="6" fill="${C.glow}"/>
+        <line x1="44" y1="34" x2="28" y2="34" stroke="${C.body}" stroke-width="3.5" stroke-linecap="round"/>${joint(28,34)}<line x1="28" y1="34" x2="22" y2="32" stroke="${C.body}" stroke-width="3"/>
+        <line x1="56" y1="34" x2="72" y2="34" stroke="${C.body}" stroke-width="3.5" stroke-linecap="round"/>${joint(72,34)}<line x1="72" y1="34" x2="78" y2="32" stroke="${C.body}" stroke-width="3"/>
+        <line x1="46" y1="46" x2="40" y2="62" stroke="${C.body}" stroke-width="3"/>${joint(40,62)}<line x1="40" y1="62" x2="38" y2="72" stroke="${C.body}" stroke-width="2.5"/>
+        <line x1="54" y1="46" x2="60" y2="62" stroke="${C.body}" stroke-width="3"/>${joint(60,62)}<line x1="60" y1="62" x2="62" y2="72" stroke="${C.body}" stroke-width="2.5"/>
+      </g>
+    </svg>`,
+    pushdown: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <!-- cable machine --><rect x="46" y="6" width="8" height="8" rx="2" fill="${C.bench}"/><line x1="50" y1="14" x2="50" y2="40" stroke="${C.bench}" stroke-width="1.5" stroke-dasharray="3,2"/>
+      ${head(50, 24)}
+      <rect x="43" y="30" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+      <ellipse cx="42" cy="46" rx="4" ry="5" fill="${C.glow}"/><ellipse cx="58" cy="46" rx="4" ry="5" fill="${C.glow}"/>
+      <g class="anim-pushdown"><line x1="44" y1="36" x2="36" y2="42" stroke="${C.body}" stroke-width="3.5"/>${joint(36,42)}<line x1="36" y1="42" x2="38" y2="56" stroke="${C.body}" stroke-width="3"/><rect x="34" y="54" width="8" height="4" rx="2" fill="${C.equip}"/>
+      <line x1="56" y1="36" x2="64" y2="42" stroke="${C.body}" stroke-width="3.5"/>${joint(64,42)}<line x1="64" y1="42" x2="62" y2="56" stroke="${C.body}" stroke-width="3"/><rect x="58" y="54" width="8" height="4" rx="2" fill="${C.equip}"/></g>
+      <line x1="46" y1="48" x2="38" y2="68" stroke="${C.body}" stroke-width="3"/><line x1="54" y1="48" x2="62" y2="68" stroke="${C.body}" stroke-width="3"/>
+      ${joint(38,68)}${joint(62,68)}<line x1="38" y1="68" x2="36" y2="80" stroke="${C.body}" stroke-width="2.5"/><line x1="62" y1="68" x2="64" y2="80" stroke="${C.body}" stroke-width="2.5"/>
+    </svg>`,
+    overhead: `<svg class="ex-anim" viewBox="0 0 100 100">
+      ${head(50, 22)}
+      <rect x="43" y="28" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+      <ellipse cx="42" cy="34" rx="3" ry="5" fill="${C.glow}"/><ellipse cx="58" cy="34" rx="3" ry="5" fill="${C.glow}"/>
+      <g class="anim-overhead"><line x1="44" y1="32" x2="40" y2="22" stroke="${C.body}" stroke-width="3.5"/>${joint(40,22)}<line x1="40" y1="22" x2="44" y2="12" stroke="${C.body}" stroke-width="3"/>
+      <line x1="56" y1="32" x2="60" y2="22" stroke="${C.body}" stroke-width="3.5"/>${joint(60,22)}<line x1="60" y1="22" x2="56" y2="12" stroke="${C.body}" stroke-width="3"/>
+      <ellipse cx="50" cy="10" rx="8" ry="5" fill="${C.equipDark}" opacity="0.7"/></g>
+      <line x1="46" y1="46" x2="40" y2="66" stroke="${C.body}" stroke-width="3"/><line x1="54" y1="46" x2="60" y2="66" stroke="${C.body}" stroke-width="3"/>
+      ${joint(40,66)}${joint(60,66)}<line x1="40" y1="66" x2="38" y2="80" stroke="${C.body}" stroke-width="2.5"/><line x1="60" y1="66" x2="62" y2="80" stroke="${C.body}" stroke-width="2.5"/>
+    </svg>`,
+    pushup: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-pushup">${head(22, 40)}
+        <line x1="28" y1="44" x2="76" y2="50" stroke="${C.body}" stroke-width="4" stroke-linecap="round"/>
+        <ellipse cx="40" cy="46" rx="8" ry="3" fill="${C.glow}"/>
+        <line x1="26" y1="48" x2="20" y2="58" stroke="${C.body}" stroke-width="3.5"/>${joint(20,58)}<line x1="20" y1="58" x2="18" y2="68" stroke="${C.body}" stroke-width="3"/>
+        <line x1="28" y1="48" x2="24" y2="58" stroke="${C.body}" stroke-width="3.5"/>${joint(24,58)}<line x1="24" y1="58" x2="22" y2="68" stroke="${C.body}" stroke-width="3"/>
+        <line x1="76" y1="50" x2="82" y2="64" stroke="${C.body}" stroke-width="3"/><line x1="76" y1="50" x2="70" y2="64" stroke="${C.body}" stroke-width="3"/>
+      </g>
+      <line x1="16" y1="68" x2="84" y2="68" stroke="${C.bench}" stroke-width="2" opacity="0.3"/>
+    </svg>`,
+    deadlift: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-deadlift">${head(50, 18)}
+        <rect x="43" y="24" width="14" height="20" rx="5" fill="${C.body}" opacity="0.7"/>
+        <ellipse cx="50" cy="38" rx="8" ry="6" fill="rgba(248,113,113,0.15)"/>
+        <!-- arms --><line x1="44" y1="28" x2="34" y2="42" stroke="${C.body}" stroke-width="3.5"/>${joint(34,42)}<line x1="34" y1="42" x2="32" y2="54" stroke="${C.body}" stroke-width="3"/>
+        <line x1="56" y1="28" x2="66" y2="42" stroke="${C.body}" stroke-width="3.5"/>${joint(66,42)}<line x1="66" y1="42" x2="68" y2="54" stroke="${C.body}" stroke-width="3"/>
+        <!-- legs --><line x1="46" y1="44" x2="38" y2="62" stroke="${C.body}" stroke-width="3.5"/>${joint(38,62)}<line x1="38" y1="62" x2="36" y2="76" stroke="${C.body}" stroke-width="3"/>
+        <line x1="54" y1="44" x2="62" y2="62" stroke="${C.body}" stroke-width="3.5"/>${joint(62,62)}<line x1="62" y1="62" x2="64" y2="76" stroke="${C.body}" stroke-width="3"/>
+      </g>
+      <!-- barbell --><line x1="10" y1="78" x2="90" y2="78" stroke="${C.equip}" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="10" cy="78" r="6" fill="${C.equipDark}" opacity="0.8"/><circle cx="90" cy="78" r="6" fill="${C.equipDark}" opacity="0.8"/>
+      <circle cx="6" cy="78" r="4.5" fill="${C.equipDark}" opacity="0.6"/><circle cx="94" cy="78" r="4.5" fill="${C.equipDark}" opacity="0.6"/>
+    </svg>`,
+    pullup: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <!-- bar --><line x1="10" y1="10" x2="90" y2="10" stroke="${C.equip}" stroke-width="4" stroke-linecap="round"/>
+      <g class="anim-pullup">${head(50, 22)}
+        <rect x="43" y="28" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+        <ellipse cx="50" cy="32" rx="10" ry="5" fill="rgba(96,165,250,0.15)"/>
+        <line x1="44" y1="30" x2="36" y2="18" stroke="${C.body}" stroke-width="3.5"/>${joint(36,18)}<line x1="36" y1="18" x2="34" y2="12" stroke="${C.body}" stroke-width="3"/>
+        <line x1="56" y1="30" x2="64" y2="18" stroke="${C.body}" stroke-width="3.5"/>${joint(64,18)}<line x1="64" y1="18" x2="66" y2="12" stroke="${C.body}" stroke-width="3"/>
+        <line x1="46" y1="46" x2="42" y2="64" stroke="${C.body}" stroke-width="3"/>${joint(42,64)}<line x1="42" y1="64" x2="40" y2="78" stroke="${C.body}" stroke-width="2.5"/>
+        <line x1="54" y1="46" x2="58" y2="64" stroke="${C.body}" stroke-width="3"/>${joint(58,64)}<line x1="58" y1="64" x2="60" y2="78" stroke="${C.body}" stroke-width="2.5"/>
+      </g>
+    </svg>`,
+    row: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-row">${head(34, 22)}
+        <line x1="38" y1="28" x2="56" y2="50" stroke="${C.body}" stroke-width="3.5" stroke-linecap="round"/>
+        <ellipse cx="48" cy="38" rx="6" ry="8" fill="rgba(96,165,250,0.15)"/>
+        <line x1="56" y1="50" x2="70" y2="38" stroke="${C.body}" stroke-width="3.5"/>${joint(70,38)}<line x1="70" y1="38" x2="72" y2="28" stroke="${C.body}" stroke-width="3"/>
+        <line x1="40" y1="32" x2="30" y2="38" stroke="${C.body}" stroke-width="3"/>${joint(30,38)}<line x1="30" y1="38" x2="22" y2="32" stroke="${C.body}" stroke-width="3"/>
+        <line x1="56" y1="50" x2="46" y2="70" stroke="${C.body}" stroke-width="3"/>${joint(46,70)}<line x1="46" y1="70" x2="38" y2="80" stroke="${C.body}" stroke-width="2.5"/>
+        <line x1="56" y1="50" x2="66" y2="70" stroke="${C.body}" stroke-width="3"/>${joint(66,70)}<line x1="66" y1="70" x2="72" y2="80" stroke="${C.body}" stroke-width="2.5"/>
+      </g>
+      <line x1="10" y1="80" x2="90" y2="80" stroke="${C.equip}" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="10" cy="80" r="5.5" fill="${C.equipDark}" opacity="0.8"/><circle cx="90" cy="80" r="5.5" fill="${C.equipDark}" opacity="0.8"/>
+    </svg>`,
+    facepull: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <rect x="46" y="8" width="8" height="8" rx="2" fill="${C.bench}"/><line x1="50" y1="16" x2="50" y2="36" stroke="${C.bench}" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <g class="anim-facepull">${head(50, 24)}
+        <rect x="43" y="30" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+        <ellipse cx="50" cy="32" rx="8" ry="4" fill="rgba(96,165,250,0.15)"/>
+        <line x1="44" y1="34" x2="34" y2="28" stroke="${C.body}" stroke-width="3.5"/>${joint(34,28)}<line x1="34" y1="28" x2="38" y2="22" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/>
+        <line x1="56" y1="34" x2="66" y2="28" stroke="${C.body}" stroke-width="3.5"/>${joint(66,28)}<line x1="66" y1="28" x2="62" y2="22" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/>
+        <line x1="46" y1="48" x2="40" y2="68" stroke="${C.body}" stroke-width="3"/><line x1="54" y1="48" x2="60" y2="68" stroke="${C.body}" stroke-width="3"/>
+        ${joint(40,68)}${joint(60,68)}<line x1="40" y1="68" x2="38" y2="80" stroke="${C.body}" stroke-width="2.5"/><line x1="60" y1="68" x2="62" y2="80" stroke="${C.body}" stroke-width="2.5"/>
+      </g>
+    </svg>`,
+    curl: `<svg class="ex-anim" viewBox="0 0 100 100">
+      ${head(50, 16)}
+      <rect x="43" y="22" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+      <ellipse cx="40" cy="34" rx="4" ry="6" fill="${C.glow}"/><ellipse cx="60" cy="34" rx="4" ry="6" fill="${C.glow}"/>
+      <line x1="44" y1="28" x2="36" y2="38" stroke="${C.body}" stroke-width="3.5"/>${joint(36,38)}
+      <g class="anim-curl"><line x1="36" y1="38" x2="34" y2="26" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/><ellipse cx="33" cy="24" rx="5" ry="4" fill="${C.equipDark}" opacity="0.7"/></g>
+      <line x1="56" y1="28" x2="64" y2="38" stroke="${C.body}" stroke-width="3.5"/>${joint(64,38)}
+      <g class="anim-curl"><line x1="64" y1="38" x2="66" y2="26" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/><ellipse cx="67" cy="24" rx="5" ry="4" fill="${C.equipDark}" opacity="0.7"/></g>
+      <line x1="46" y1="40" x2="40" y2="62" stroke="${C.body}" stroke-width="3"/><line x1="54" y1="40" x2="60" y2="62" stroke="${C.body}" stroke-width="3"/>
+      ${joint(40,62)}${joint(60,62)}<line x1="40" y1="62" x2="38" y2="78" stroke="${C.body}" stroke-width="2.5"/><line x1="60" y1="62" x2="62" y2="78" stroke="${C.body}" stroke-width="2.5"/>
+    </svg>`,
+    squat: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-squat">${head(50, 14)}
+        <rect x="43" y="20" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+        <ellipse cx="50" cy="44" rx="10" ry="6" fill="rgba(52,211,153,0.15)"/>
+        <line x1="44" y1="24" x2="32" y2="18" stroke="${C.body}" stroke-width="3.5"/>${joint(32,18)}<line x1="32" y1="18" x2="22" y2="16" stroke="${C.body}" stroke-width="3"/>
+        <line x1="56" y1="24" x2="68" y2="18" stroke="${C.body}" stroke-width="3.5"/>${joint(68,18)}<line x1="68" y1="18" x2="78" y2="16" stroke="${C.body}" stroke-width="3"/>
+        <line x1="14" y1="14" x2="86" y2="14" stroke="${C.equip}" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="14" cy="14" r="5.5" fill="${C.equipDark}" opacity="0.8"/><circle cx="86" cy="14" r="5.5" fill="${C.equipDark}" opacity="0.8"/>
+        <circle cx="10" cy="14" r="4" fill="${C.equipDark}" opacity="0.6"/><circle cx="90" cy="14" r="4" fill="${C.equipDark}" opacity="0.6"/>
+        <line x1="46" y1="38" x2="36" y2="58" stroke="${C.body}" stroke-width="3.5"/>${joint(36,58)}<line x1="36" y1="58" x2="34" y2="76" stroke="${C.body}" stroke-width="3"/><rect x="28" y="74" width="12" height="4" rx="2" fill="${C.joint}"/>
+        <line x1="54" y1="38" x2="64" y2="58" stroke="${C.body}" stroke-width="3.5"/>${joint(64,58)}<line x1="64" y1="58" x2="66" y2="76" stroke="${C.body}" stroke-width="3"/><rect x="60" y="74" width="12" height="4" rx="2" fill="${C.joint}"/>
+      </g>
+    </svg>`,
+    legpress: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <rect x="10" y="40" width="30" height="5" rx="2" fill="${C.bench}"/>
+      ${head(26, 34)}
+      <line x1="30" y1="40" x2="42" y2="54" stroke="${C.body}" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse cx="54" cy="52" rx="8" ry="5" fill="rgba(52,211,153,0.15)"/>
+      <g class="anim-legpress"><line x1="42" y1="54" x2="64" y2="62" stroke="${C.body}" stroke-width="3.5"/>${joint(64,62)}<line x1="64" y1="62" x2="78" y2="56" stroke="${C.body}" stroke-width="3"/>
+      <line x1="42" y1="54" x2="64" y2="52" stroke="${C.body}" stroke-width="3.5"/>${joint(64,52)}<line x1="64" y1="52" x2="78" y2="48" stroke="${C.body}" stroke-width="3"/></g>
+      <rect x="80" y="38" width="8" height="30" rx="3" fill="${C.equipDark}" opacity="0.6"/>
+    </svg>`,
+    lunge: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-lunge">${head(50, 12)}
+        <rect x="43" y="18" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+        <ellipse cx="50" cy="42" rx="8" ry="5" fill="rgba(52,211,153,0.15)"/>
+        <line x1="44" y1="24" x2="36" y2="20" stroke="${C.body}" stroke-width="3"/><line x1="56" y1="24" x2="64" y2="20" stroke="${C.body}" stroke-width="3"/>
+        <line x1="46" y1="36" x2="34" y2="56" stroke="${C.body}" stroke-width="3.5"/>${joint(34,56)}<line x1="34" y1="56" x2="28" y2="74" stroke="${C.body}" stroke-width="3"/><rect x="22" y="72" width="12" height="4" rx="2" fill="${C.joint}"/>
+        <line x1="54" y1="36" x2="66" y2="56" stroke="${C.body}" stroke-width="3.5"/>${joint(66,56)}<line x1="66" y1="56" x2="72" y2="74" stroke="${C.body}" stroke-width="3"/><rect x="66" y="72" width="12" height="4" rx="2" fill="${C.joint}"/>
+      </g>
+    </svg>`,
+    legcurl: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <rect x="12" y="34" width="76" height="6" rx="3" fill="${C.bench}"/><rect x="12" y="40" width="8" height="20" rx="3" fill="${C.bench}"/><rect x="80" y="40" width="8" height="20" rx="3" fill="${C.bench}"/>
+      ${head(24, 28)}
+      <line x1="28" y1="34" x2="72" y2="34" stroke="${C.body}" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="62" cy="30" rx="6" ry="4" fill="rgba(52,211,153,0.15)"/>
+      <g class="anim-legcurl"><line x1="72" y1="34" x2="64" y2="18" stroke="${C.body}" stroke-width="3.5" stroke-linecap="round"/>${joint(64,18)}<line x1="64" y1="18" x2="58" y2="14" stroke="${C.body}" stroke-width="3"/><circle cx="56" cy="14" r="3.5" fill="${C.equipDark}" opacity="0.6"/></g>
+    </svg>`,
+    hipthrust: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <rect x="8" y="48" width="30" height="6" rx="3" fill="${C.bench}"/>
+      <g class="anim-hipthrust">${head(22, 40)}
+        <line x1="28" y1="48" x2="56" y2="46" stroke="${C.body}" stroke-width="4" stroke-linecap="round"/>
+        <ellipse cx="50" cy="42" rx="8" ry="5" fill="rgba(52,211,153,0.2)"/>
+        <rect x="42" y="38" width="16" height="6" rx="3" fill="${C.equip}" opacity="0.4"/>
+        <line x1="56" y1="46" x2="70" y2="68" stroke="${C.body}" stroke-width="3.5"/>${joint(70,68)}<line x1="70" y1="68" x2="72" y2="80" stroke="${C.body}" stroke-width="3"/>
+        <line x1="56" y1="46" x2="46" y2="68" stroke="${C.body}" stroke-width="3.5"/>${joint(46,68)}<line x1="46" y1="68" x2="44" y2="80" stroke="${C.body}" stroke-width="3"/>
+      </g>
+    </svg>`,
+    calfraise: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-calfraise">${head(50, 14)}
+        <rect x="43" y="20" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+        <line x1="44" y1="26" x2="38" y2="22" stroke="${C.body}" stroke-width="3"/><line x1="56" y1="26" x2="62" y2="22" stroke="${C.body}" stroke-width="3"/>
+        <line x1="46" y1="38" x2="44" y2="56" stroke="${C.body}" stroke-width="3.5"/><line x1="54" y1="38" x2="56" y2="56" stroke="${C.body}" stroke-width="3.5"/>
+        ${joint(44,56)}${joint(56,56)}
+        <line x1="44" y1="56" x2="42" y2="72" stroke="${C.body}" stroke-width="3"/><line x1="56" y1="56" x2="58" y2="72" stroke="${C.body}" stroke-width="3"/>
+        <ellipse cx="50" cy="68" rx="4" ry="6" fill="rgba(52,211,153,0.2)"/>
+      </g>
+      <rect x="34" y="74" width="32" height="5" rx="2" fill="${C.equip}" opacity="0.4"/>
+    </svg>`,
+    ohp: `<svg class="ex-anim" viewBox="0 0 100 100">
+      ${head(50, 26)}
+      <rect x="43" y="32" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+      <ellipse cx="50" cy="36" rx="8" ry="5" fill="rgba(251,146,60,0.15)"/>
+      <g class="anim-ohp"><line x1="44" y1="36" x2="34" y2="22" stroke="${C.body}" stroke-width="3.5"/>${joint(34,22)}<line x1="34" y1="22" x2="28" y2="14" stroke="${C.body}" stroke-width="3"/>
+      <line x1="56" y1="36" x2="66" y2="22" stroke="${C.body}" stroke-width="3.5"/>${joint(66,22)}<line x1="66" y1="22" x2="72" y2="14" stroke="${C.body}" stroke-width="3"/>
+      <line x1="14" y1="12" x2="86" y2="12" stroke="${C.equip}" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="14" cy="12" r="5.5" fill="${C.equipDark}" opacity="0.8"/><circle cx="86" cy="12" r="5.5" fill="${C.equipDark}" opacity="0.8"/></g>
+      <line x1="46" y1="50" x2="40" y2="68" stroke="${C.body}" stroke-width="3"/><line x1="54" y1="50" x2="60" y2="68" stroke="${C.body}" stroke-width="3"/>
+      ${joint(40,68)}${joint(60,68)}<line x1="40" y1="68" x2="38" y2="82" stroke="${C.body}" stroke-width="2.5"/><line x1="60" y1="68" x2="62" y2="82" stroke="${C.body}" stroke-width="2.5"/>
+    </svg>`,
+    lateral: `<svg class="ex-anim" viewBox="0 0 100 100">
+      ${head(50, 16)}
+      <rect x="43" y="22" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+      <ellipse cx="44" cy="28" rx="4" ry="5" fill="rgba(251,146,60,0.15)"/><ellipse cx="56" cy="28" rx="4" ry="5" fill="rgba(251,146,60,0.15)"/>
+      <g class="anim-lateral">
+        <line x1="44" y1="28" x2="26" y2="32" stroke="${C.body}" stroke-width="3.5"/>${joint(26,32)}<line x1="26" y1="32" x2="14" y2="34" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/><circle cx="12" cy="34" r="4" fill="${C.equipDark}" opacity="0.7"/>
+        <line x1="56" y1="28" x2="74" y2="32" stroke="${C.body}" stroke-width="3.5"/>${joint(74,32)}<line x1="74" y1="32" x2="86" y2="34" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/><circle cx="88" cy="34" r="4" fill="${C.equipDark}" opacity="0.7"/>
+      </g>
+      <line x1="46" y1="40" x2="40" y2="62" stroke="${C.body}" stroke-width="3"/><line x1="54" y1="40" x2="60" y2="62" stroke="${C.body}" stroke-width="3"/>
+      ${joint(40,62)}${joint(60,62)}<line x1="40" y1="62" x2="38" y2="78" stroke="${C.body}" stroke-width="2.5"/><line x1="60" y1="62" x2="62" y2="78" stroke="${C.body}" stroke-width="2.5"/>
+    </svg>`,
+    crunch: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <line x1="20" y1="70" x2="80" y2="70" stroke="${C.bench}" stroke-width="3" opacity="0.3"/>
+      <g class="anim-crunch">${head(42, 30)}
+        <line x1="46" y1="36" x2="58" y2="56" stroke="${C.body}" stroke-width="4" stroke-linecap="round"/>
+        <ellipse cx="54" cy="50" rx="6" ry="8" fill="rgba(251,146,60,0.15)"/>
+        <line x1="44" y1="38" x2="38" y2="32" stroke="${C.body}" stroke-width="3"/><line x1="44" y1="38" x2="50" y2="32" stroke="${C.body}" stroke-width="3"/>
+        <line x1="58" y1="56" x2="52" y2="68" stroke="${C.body}" stroke-width="3.5"/>${joint(52,68)}<line x1="52" y1="68" x2="50" y2="70" stroke="${C.body}" stroke-width="3"/>
+        <line x1="58" y1="56" x2="68" y2="68" stroke="${C.body}" stroke-width="3.5"/>${joint(68,68)}<line x1="68" y1="68" x2="70" y2="70" stroke="${C.body}" stroke-width="3"/>
+      </g>
+    </svg>`,
+    legraise: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <line x1="40" y1="10" x2="60" y2="10" stroke="${C.equip}" stroke-width="4" stroke-linecap="round"/>
+      ${head(50, 20)}
+      <rect x="43" y="26" width="14" height="14" rx="5" fill="${C.body}" opacity="0.7"/>
+      <line x1="44" y1="28" x2="38" y2="12" stroke="${C.body}" stroke-width="3"/><line x1="56" y1="28" x2="62" y2="12" stroke="${C.body}" stroke-width="3"/>
+      <g class="anim-legraise">
+        <ellipse cx="50" cy="52" rx="6" ry="8" fill="rgba(251,146,60,0.15)"/>
+        <line x1="46" y1="40" x2="38" y2="60" stroke="${C.body}" stroke-width="3.5"/>${joint(38,60)}<line x1="38" y1="60" x2="34" y2="76" stroke="${C.body}" stroke-width="3"/>
+        <line x1="54" y1="40" x2="62" y2="60" stroke="${C.body}" stroke-width="3.5"/>${joint(62,60)}<line x1="62" y1="60" x2="66" y2="76" stroke="${C.body}" stroke-width="3"/>
+      </g>
+    </svg>`,
+    plank: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <line x1="10" y1="72" x2="90" y2="72" stroke="${C.bench}" stroke-width="2" opacity="0.3"/>
+      <g class="anim-plank">${head(18, 44)}
+        <line x1="24" y1="48" x2="78" y2="52" stroke="${C.body}" stroke-width="4.5" stroke-linecap="round"/>
+        <ellipse cx="50" cy="48" rx="14" ry="4" fill="rgba(251,146,60,0.12)"/>
+        <line x1="22" y1="52" x2="18" y2="66" stroke="${C.body}" stroke-width="3"/>${joint(18,66)}<line x1="18" y1="66" x2="16" y2="72" stroke="${C.body}" stroke-width="2.5"/>
+        <line x1="26" y1="52" x2="24" y2="66" stroke="${C.body}" stroke-width="3"/>${joint(24,66)}<line x1="24" y1="66" x2="22" y2="72" stroke="${C.body}" stroke-width="2.5"/>
+        <line x1="78" y1="52" x2="80" y2="70" stroke="${C.body}" stroke-width="3"/><line x1="78" y1="52" x2="74" y2="70" stroke="${C.body}" stroke-width="3"/>
+      </g>
+    </svg>`,
+    clean: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-clean">${head(50, 14)}
+        <rect x="43" y="20" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+        <ellipse cx="50" cy="30" rx="10" ry="6" fill="rgba(251,191,36,0.12)"/>
+        <line x1="44" y1="26" x2="34" y2="38" stroke="${C.body}" stroke-width="3.5"/>${joint(34,38)}<line x1="34" y1="38" x2="28" y2="48" stroke="${C.body}" stroke-width="3"/>
+        <line x1="56" y1="26" x2="66" y2="38" stroke="${C.body}" stroke-width="3.5"/>${joint(66,38)}<line x1="66" y1="38" x2="72" y2="48" stroke="${C.body}" stroke-width="3"/>
+        <line x1="46" y1="38" x2="40" y2="58" stroke="${C.body}" stroke-width="3.5"/>${joint(40,58)}<line x1="40" y1="58" x2="38" y2="74" stroke="${C.body}" stroke-width="3"/>
+        <line x1="54" y1="38" x2="60" y2="58" stroke="${C.body}" stroke-width="3.5"/>${joint(60,58)}<line x1="60" y1="58" x2="62" y2="74" stroke="${C.body}" stroke-width="3"/>
+      </g>
+      <line x1="12" y1="78" x2="88" y2="78" stroke="${C.equip}" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="12" cy="78" r="5.5" fill="${C.equipDark}" opacity="0.8"/><circle cx="88" cy="78" r="5.5" fill="${C.equipDark}" opacity="0.8"/>
+    </svg>`,
+    walk: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-walk">${head(50, 14)}
+        <rect x="43" y="20" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+        <line x1="44" y1="28" x2="32" y2="38" stroke="${C.body}" stroke-width="3.5"/>${joint(32,38)}<line x1="32" y1="38" x2="28" y2="50" stroke="${C.body}" stroke-width="3"/>
+        <line x1="56" y1="28" x2="68" y2="38" stroke="${C.body}" stroke-width="3.5"/>${joint(68,38)}<line x1="68" y1="38" x2="72" y2="50" stroke="${C.body}" stroke-width="3"/>
+        <rect x="22" y="46" width="10" height="12" rx="3" fill="${C.equipDark}" opacity="0.5"/><rect x="68" y="46" width="10" height="12" rx="3" fill="${C.equipDark}" opacity="0.5"/>
+        <line x1="46" y1="38" x2="38" y2="58" stroke="${C.body}" stroke-width="3.5"/>${joint(38,58)}<line x1="38" y1="58" x2="36" y2="76" stroke="${C.body}" stroke-width="3"/>
+        <line x1="54" y1="38" x2="62" y2="58" stroke="${C.body}" stroke-width="3.5"/>${joint(62,58)}<line x1="62" y1="58" x2="64" y2="76" stroke="${C.body}" stroke-width="3"/>
+      </g>
+    </svg>`,
+    jump: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <rect x="24" y="62" width="52" height="20" rx="4" fill="${C.bench}" opacity="0.6"/>
+      <g class="anim-jump">${head(50, 14)}
+        <rect x="43" y="20" width="14" height="16" rx="5" fill="${C.body}" opacity="0.7"/>
+        <line x1="44" y1="26" x2="36" y2="20" stroke="${C.body}" stroke-width="3"/><line x1="56" y1="26" x2="64" y2="20" stroke="${C.body}" stroke-width="3"/>
+        <line x1="46" y1="36" x2="40" y2="50" stroke="${C.body}" stroke-width="3.5"/>${joint(40,50)}<line x1="40" y1="50" x2="38" y2="62" stroke="${C.body}" stroke-width="3"/>
+        <line x1="54" y1="36" x2="60" y2="50" stroke="${C.body}" stroke-width="3.5"/>${joint(60,50)}<line x1="60" y1="50" x2="62" y2="62" stroke="${C.body}" stroke-width="3"/>
+      </g>
+    </svg>`,
+    ropes: `<svg class="ex-anim" viewBox="0 0 100 100">
+      ${head(50, 18)}
+      <rect x="43" y="24" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+      <path d="M40,36 Q28,46 24,60 Q20,74 14,86" stroke="${C.muscle}" stroke-width="3.5" fill="none" stroke-linecap="round" class="anim-rope-l"/>
+      <path d="M60,36 Q72,46 76,60 Q80,74 86,86" stroke="${C.muscle}" stroke-width="3.5" fill="none" stroke-linecap="round" class="anim-rope-r"/>
+      <line x1="46" y1="42" x2="40" y2="62" stroke="${C.body}" stroke-width="3"/><line x1="54" y1="42" x2="60" y2="62" stroke="${C.body}" stroke-width="3"/>
+      ${joint(40,62)}${joint(60,62)}<line x1="40" y1="62" x2="38" y2="76" stroke="${C.body}" stroke-width="2.5"/><line x1="60" y1="62" x2="62" y2="76" stroke="${C.body}" stroke-width="2.5"/>
+    </svg>`,
+    sprint: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-sprint">${head(38, 16)}
+        <line x1="42" y1="22" x2="52" y2="44" stroke="${C.body}" stroke-width="4" stroke-linecap="round"/>
+        <ellipse cx="46" cy="34" rx="5" ry="8" fill="rgba(244,114,182,0.12)"/>
+        <line x1="42" y1="28" x2="28" y2="24" stroke="${C.body}" stroke-width="3.5"/>${joint(28,24)}<line x1="28" y1="24" x2="18" y2="22" stroke="${C.body}" stroke-width="3"/>
+        <line x1="44" y1="30" x2="58" y2="22" stroke="${C.body}" stroke-width="3.5"/>${joint(58,22)}<line x1="58" y1="22" x2="68" y2="18" stroke="${C.body}" stroke-width="3"/>
+        <line x1="52" y1="44" x2="36" y2="68" stroke="${C.body}" stroke-width="3.5"/>${joint(36,68)}<line x1="36" y1="68" x2="28" y2="80" stroke="${C.body}" stroke-width="3"/>
+        <line x1="52" y1="44" x2="68" y2="62" stroke="${C.body}" stroke-width="3.5"/>${joint(68,62)}<line x1="68" y1="62" x2="76" y2="72" stroke="${C.body}" stroke-width="3"/>
+      </g>
+    </svg>`,
+    burpee: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-burpee">${head(50, 14)}
+        <rect x="43" y="20" width="14" height="16" rx="5" fill="${C.body}" opacity="0.7"/>
+        <ellipse cx="50" cy="30" rx="8" ry="5" fill="rgba(244,114,182,0.12)"/>
+        <line x1="44" y1="26" x2="32" y2="20" stroke="${C.body}" stroke-width="3.5"/>${joint(32,20)}<line x1="32" y1="20" x2="24" y2="16" stroke="${C.body}" stroke-width="3"/>
+        <line x1="56" y1="26" x2="68" y2="20" stroke="${C.body}" stroke-width="3.5"/>${joint(68,20)}<line x1="68" y1="20" x2="76" y2="16" stroke="${C.body}" stroke-width="3"/>
+        <line x1="46" y1="36" x2="38" y2="56" stroke="${C.body}" stroke-width="3.5"/>${joint(38,56)}<line x1="38" y1="56" x2="36" y2="74" stroke="${C.body}" stroke-width="3"/>
+        <line x1="54" y1="36" x2="62" y2="56" stroke="${C.body}" stroke-width="3.5"/>${joint(62,56)}<line x1="62" y1="56" x2="64" y2="74" stroke="${C.body}" stroke-width="3"/>
+      </g>
+    </svg>`,
+    mtnclimb: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-mtnclimb">${head(22, 36)}
+        <line x1="28" y1="42" x2="68" y2="50" stroke="${C.body}" stroke-width="4.5" stroke-linecap="round"/>
+        <ellipse cx="48" cy="46" rx="10" ry="4" fill="rgba(244,114,182,0.12)"/>
+        <line x1="26" y1="46" x2="20" y2="58" stroke="${C.body}" stroke-width="3.5"/>${joint(20,58)}<line x1="20" y1="58" x2="18" y2="70" stroke="${C.body}" stroke-width="3"/>
+        <line x1="30" y1="46" x2="26" y2="58" stroke="${C.body}" stroke-width="3.5"/>${joint(26,58)}<line x1="26" y1="58" x2="24" y2="70" stroke="${C.body}" stroke-width="3"/>
+        <line x1="68" y1="50" x2="78" y2="66" stroke="${C.body}" stroke-width="3.5"/>${joint(78,66)}<line x1="78" y1="66" x2="80" y2="70" stroke="${C.body}" stroke-width="3"/>
+        <line x1="68" y1="50" x2="52" y2="62" stroke="${C.body}" stroke-width="3.5"/>${joint(52,62)}<line x1="52" y1="62" x2="46" y2="70" stroke="${C.body}" stroke-width="3"/>
+      </g>
+    </svg>`,
+    kbswing: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-kbswing">${head(50, 16)}
+        <rect x="43" y="22" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+        <line x1="44" y1="30" x2="32" y2="42" stroke="${C.body}" stroke-width="3.5"/>${joint(32,42)}<line x1="32" y1="42" x2="36" y2="54" stroke="${C.body}" stroke-width="3"/>
+        <line x1="56" y1="30" x2="68" y2="42" stroke="${C.body}" stroke-width="3.5"/>${joint(68,42)}<line x1="68" y1="42" x2="64" y2="54" stroke="${C.body}" stroke-width="3"/>
+        <!-- kettlebell --><circle cx="50" cy="58" r="8" fill="${C.equipDark}" opacity="0.6"/><ellipse cx="50" cy="50" rx="4" ry="3" fill="none" stroke="${C.equip}" stroke-width="2"/>
+        <line x1="46" y1="40" x2="40" y2="60" stroke="${C.body}" stroke-width="3"/><line x1="54" y1="40" x2="60" y2="60" stroke="${C.body}" stroke-width="3"/>
+        ${joint(40,60)}${joint(60,60)}<line x1="40" y1="60" x2="38" y2="78" stroke="${C.body}" stroke-width="2.5"/><line x1="60" y1="60" x2="62" y2="78" stroke="${C.body}" stroke-width="2.5"/>
+      </g>
+    </svg>`,
+    rowmachine: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <rect x="8" y="66" width="84" height="5" rx="2" fill="${C.bench}"/><circle cx="14" cy="68" r="6" fill="${C.bench}" opacity="0.5"/><circle cx="86" cy="68" r="6" fill="${C.bench}" opacity="0.5"/>
+      <g class="anim-rowmachine">${head(32, 38)}
+        <line x1="38" y1="44" x2="52" y2="58" stroke="${C.body}" stroke-width="4" stroke-linecap="round"/>
+        <ellipse cx="44" cy="50" rx="6" ry="5" fill="rgba(96,165,250,0.12)"/>
+        <line x1="36" y1="46" x2="24" y2="54" stroke="${C.body}" stroke-width="3"/>${joint(24,54)}<line x1="24" y1="54" x2="18" y2="60" stroke="${C.body}" stroke-width="3"/>
+        <line x1="52" y1="58" x2="62" y2="64" stroke="${C.body}" stroke-width="3.5"/>${joint(62,64)}<line x1="62" y1="64" x2="64" y2="66" stroke="${C.body}" stroke-width="3"/>
+        <line x1="52" y1="58" x2="42" y2="64" stroke="${C.body}" stroke-width="3.5"/>${joint(42,64)}<line x1="42" y1="64" x2="40" y2="66" stroke="${C.body}" stroke-width="3"/>
+        <line x1="38" y1="48" x2="60" y2="44" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/>
+      </g>
+    </svg>`,
+    stretch: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-stretch">${head(50, 14)}
+        <rect x="43" y="20" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+        <line x1="44" y1="26" x2="24" y2="16" stroke="${C.body}" stroke-width="3.5"/>${joint(24,16)}<line x1="24" y1="16" x2="14" y2="12" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/>
+        <line x1="56" y1="26" x2="76" y2="16" stroke="${C.body}" stroke-width="3.5"/>${joint(76,16)}<line x1="76" y1="16" x2="86" y2="12" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/>
+        <line x1="46" y1="38" x2="34" y2="60" stroke="${C.body}" stroke-width="3.5"/>${joint(34,60)}<line x1="34" y1="60" x2="26" y2="78" stroke="${C.body}" stroke-width="3"/>
+        <line x1="54" y1="38" x2="66" y2="60" stroke="${C.body}" stroke-width="3.5"/>${joint(66,60)}<line x1="66" y1="60" x2="74" y2="78" stroke="${C.body}" stroke-width="3"/>
+        <circle cx="50" cy="50" r="20" fill="none" stroke="${C.cyan}" stroke-width="1" opacity="0.2"/>
+      </g>
+    </svg>`,
+    yoga: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-yoga">${head(50, 16)}
+        <rect x="43" y="22" width="14" height="18" rx="5" fill="${C.body}" opacity="0.7"/>
+        <circle cx="50" cy="50" r="24" fill="none" stroke="${C.cyan}" stroke-width="1.5" opacity="0.15"/>
+        <circle cx="50" cy="50" r="32" fill="none" stroke="${C.cyan}" stroke-width="1" opacity="0.08"/>
+        <line x1="44" y1="28" x2="22" y2="36" stroke="${C.body}" stroke-width="3.5"/>${joint(22,36)}<line x1="22" y1="36" x2="12" y2="38" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/>
+        <line x1="56" y1="28" x2="78" y2="36" stroke="${C.body}" stroke-width="3.5"/>${joint(78,36)}<line x1="78" y1="36" x2="88" y2="38" stroke="${C.body}" stroke-width="3" stroke-linecap="round"/>
+        <line x1="46" y1="40" x2="36" y2="62" stroke="${C.body}" stroke-width="3.5"/>${joint(36,62)}<line x1="36" y1="62" x2="30" y2="78" stroke="${C.body}" stroke-width="3"/>
+        <line x1="54" y1="40" x2="64" y2="62" stroke="${C.body}" stroke-width="3.5"/>${joint(64,62)}<line x1="64" y1="62" x2="70" y2="78" stroke="${C.body}" stroke-width="3"/>
+      </g>
+    </svg>`,
+    foamroll: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <ellipse cx="50" cy="72" rx="22" ry="8" fill="${C.cyan}" opacity="0.2"/>
+      <ellipse cx="50" cy="72" rx="18" ry="6" fill="${C.cyan}" opacity="0.15"/>
+      <g class="anim-foamroll">${head(30, 42)}
+        <line x1="36" y1="48" x2="64" y2="60" stroke="${C.body}" stroke-width="4" stroke-linecap="round"/>
+        <line x1="64" y1="60" x2="72" y2="72" stroke="${C.body}" stroke-width="3.5"/>${joint(72,72)}<line x1="72" y1="72" x2="74" y2="76" stroke="${C.body}" stroke-width="3"/>
+        <line x1="64" y1="60" x2="56" y2="72" stroke="${C.body}" stroke-width="3.5"/>${joint(56,72)}<line x1="56" y1="72" x2="54" y2="76" stroke="${C.body}" stroke-width="3"/>
+      </g>
+    </svg>`,
+    breathe: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="8" fill="none" stroke="${C.muscle}" stroke-width="2.5" class="anim-breathe"/>
+      <circle cx="50" cy="50" r="20" fill="none" stroke="${C.muscle}" stroke-width="1.5" opacity="0.15"/>
+      <circle cx="50" cy="50" r="32" fill="none" stroke="${C.muscle}" stroke-width="1" opacity="0.08"/>
+      <circle cx="50" cy="50" r="44" fill="none" stroke="${C.muscle}" stroke-width="0.5" opacity="0.04"/>
+      ${head(50, 26)}
+      <line x1="50" y1="34" x2="50" y2="46" stroke="${C.body}" stroke-width="3"/>
+      <line x1="44" y1="38" x2="36" y2="34" stroke="${C.body}" stroke-width="2.5"/><line x1="56" y1="38" x2="64" y2="34" stroke="${C.body}" stroke-width="2.5"/>
+    </svg>`,
+    meditate: `<svg class="ex-anim" viewBox="0 0 100 100">
+      <g class="anim-meditate">
+        <circle cx="50" cy="48" r="28" fill="none" stroke="${C.muscle}" stroke-width="1" opacity="0.1"/>
+        <circle cx="50" cy="48" r="36" fill="none" stroke="${C.cyan}" stroke-width="0.8" opacity="0.06"/>
+        ${head(50, 22)}
+        <rect x="43" y="28" width="14" height="16" rx="5" fill="${C.body}" opacity="0.7"/>
+        <line x1="44" y1="34" x2="30" y2="42" stroke="${C.body}" stroke-width="3"/>${joint(30,42)}<line x1="30" y1="42" x2="38" y2="48" stroke="${C.body}" stroke-width="2.5"/>
+        <line x1="56" y1="34" x2="70" y2="42" stroke="${C.body}" stroke-width="3"/>${joint(70,42)}<line x1="70" y1="42" x2="62" y2="48" stroke="${C.body}" stroke-width="2.5"/>
+        <line x1="46" y1="44" x2="36" y2="60" stroke="${C.body}" stroke-width="3"/><line x1="36" y1="60" x2="30" y2="64" stroke="${C.body}" stroke-width="2.5"/>
+        <line x1="54" y1="44" x2="64" y2="60" stroke="${C.body}" stroke-width="3"/><line x1="64" y1="60" x2="70" y2="64" stroke="${C.body}" stroke-width="2.5"/>
+      </g>
+    </svg>`,
   };
   return svgs[key] || svgs.press;
 }
