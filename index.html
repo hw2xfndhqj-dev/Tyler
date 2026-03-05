@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GO TYLER — Weekly Training Program</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>GO TYLER — Train Like a Beast</title>
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
@@ -19,103 +19,342 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Ambient background blobs -->
-  <div class="ambient-bg">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-  </div>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="header-inner">
-      <div class="logo">
-        <div class="logo-icon">
-          <img src="icons/IMG_0811.jpeg" alt="Tyler" style="width:100%;height:100%;border-radius:inherit;object-fit:cover;">
-        </div>
-        <span class="logo-text">GO TYLER</span>
+  <!-- Onboarding Overlay -->
+  <div class="onboarding-overlay" id="onboarding">
+    <div class="onboarding-card">
+      <div class="onboarding-logo">
+        <img src="icons/IMG_0811.jpeg" alt="Tyler" />
       </div>
-      <div class="header-stats">
-        <div class="stat">
-          <span class="stat-value" id="weekStreak">0</span>
-          <span class="stat-label">Week Streak</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value" id="completedCount">0</span>
-          <span class="stat-label">Completed</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value" id="weekProgress">0%</span>
-          <span class="stat-label">This Week</span>
-        </div>
-      </div>
-      <button class="reset-btn" id="resetBtn" title="Reset all progress">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="1 4 1 10 7 10"></polyline>
-          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
-        </svg>
-      </button>
-    </div>
-  </header>
+      <h1 class="onboarding-title">GO TYLER</h1>
+      <p class="onboarding-sub">Your personal AI training coach.<br>Let's set up your profile.</p>
 
-  <!-- Motivational Banner -->
-  <section class="hero">
-    <div class="hero-inner">
-      <p class="hero-tag">YOUR WEEKLY BLUEPRINT</p>
-      <h1 class="hero-title">Train With<br/><span class="gradient-text">Purpose.</span></h1>
-      <p class="hero-sub">7 days. 7 missions. No excuses. Every rep brings you closer to the version of yourself you're building.</p>
-      <div class="progress-ring-container">
-        <svg class="progress-ring" width="120" height="120">
-          <circle class="progress-ring-bg" cx="60" cy="60" r="52" />
-          <circle class="progress-ring-fill" cx="60" cy="60" r="52" id="progressRing" />
-        </svg>
-        <div class="progress-ring-text" id="progressRingText">0/7</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Weekly Grid -->
-  <main class="week-grid" id="weekGrid">
-    <!-- Days injected by JS -->
-  </main>
-
-  <!-- Workout Detail Modal -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal" id="modal">
-      <button class="modal-close" id="modalClose">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-      <div class="modal-header">
-        <span class="modal-day-badge" id="modalDayBadge"></span>
-        <h2 class="modal-title" id="modalTitle"></h2>
-        <p class="modal-focus" id="modalFocus"></p>
-      </div>
-      <div class="modal-body" id="modalBody">
-        <!-- Exercises injected by JS -->
-      </div>
-      <div class="modal-footer">
-        <button class="btn-complete" id="btnComplete">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>Mark as Complete</span>
-        </button>
+      <div class="onboarding-step" id="onboardStep1">
+        <label class="ob-label">What's your name?</label>
+        <input type="text" class="ob-input" id="obName" placeholder="Tyler" maxlength="20" />
+        <label class="ob-label" style="margin-top:16px">Fitness level</label>
+        <div class="ob-options" id="obLevel">
+          <button class="ob-opt" data-val="beginner">Beginner</button>
+          <button class="ob-opt" data-val="intermediate">Intermediate</button>
+          <button class="ob-opt active" data-val="advanced">Advanced</button>
+        </div>
+        <label class="ob-label" style="margin-top:16px">Goal</label>
+        <div class="ob-options" id="obGoal">
+          <button class="ob-opt active" data-val="muscle">Build Muscle</button>
+          <button class="ob-opt" data-val="strength">Get Strong</button>
+          <button class="ob-opt" data-val="endurance">Endurance</button>
+          <button class="ob-opt" data-val="lose-fat">Lose Fat</button>
+        </div>
+        <button class="ob-cta" id="obStart">Let's Go</button>
       </div>
     </div>
   </div>
 
-  <!-- Spotify Player -->
-  <!-- YouTube Music -->
-  <section class="music-section">
-    <a class="ytmusic-btn" href="https://music.youtube.com/search?q=workout+music" target="_blank" rel="noopener noreferrer">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="#FF0000"><path d="M12 0C5.376 0 0 5.376 0 12s5.376 12 12 12 12-5.376 12-12S18.624 0 12 0zm0 19.104c-3.924 0-7.104-3.18-7.104-7.104S8.076 4.896 12 4.896s7.104 3.18 7.104 7.104-3.18 7.104-7.104 7.104zm0-11.352c-2.34 0-4.248 1.908-4.248 4.248S9.66 16.248 12 16.248s4.248-1.908 4.248-4.248S14.34 7.752 12 7.752zM9.6 15V9l6 3-6 3z"/></svg>
-      <span>Open Workout Music in YouTube Music</span>
-    </a>
-  </section>
+  <!-- App Shell -->
+  <div class="app" id="app">
 
-  <!-- Quote Footer -->
-  <footer class="footer">
-    <p class="quote" id="quote"></p>
-    <p class="footer-brand">GO TYLER &mdash; Built for those who show up.</p>
-  </footer>
+    <!-- ========== TAB: COACH ========== -->
+    <div class="tab-page active" id="page-coach">
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <img src="icons/IMG_0811.jpeg" alt="" class="avatar-sm" />
+          <div>
+            <p class="greeting" id="greeting">Good morning</p>
+            <h2 class="user-name" id="userName">Tyler</h2>
+          </div>
+        </div>
+        <div class="streak-badge" id="streakBadge">
+          <span class="streak-fire">&#xFE0F;</span>
+          <span id="streakNum">0</span>
+        </div>
+      </header>
+
+      <!-- Today's Workout CTA -->
+      <section class="today-card" id="todayCard">
+        <div class="today-tag">TODAY'S WORKOUT</div>
+        <h2 class="today-title" id="todayTitle">Chest & Triceps</h2>
+        <p class="today-desc" id="todayDesc">Push power</p>
+        <div class="today-meta">
+          <span id="todayDuration">55 min</span>
+          <span class="dot"></span>
+          <span id="todayIntensity">High</span>
+          <span class="dot"></span>
+          <span id="todayExCount">7 exercises</span>
+        </div>
+        <div class="today-progress-bar">
+          <div class="today-progress-fill" id="todayProgressFill"></div>
+        </div>
+        <button class="btn-start-workout" id="btnStartToday">Start Workout</button>
+      </section>
+
+      <!-- Weekly Overview -->
+      <section class="section">
+        <h3 class="section-title">This Week</h3>
+        <div class="week-mini" id="weekMini"></div>
+      </section>
+
+      <!-- AI Coach Tips -->
+      <section class="section">
+        <h3 class="section-title">Coach Says</h3>
+        <div class="coach-tip" id="coachTip">
+          <div class="coach-avatar">AI</div>
+          <p class="coach-text"></p>
+        </div>
+      </section>
+
+      <!-- Quick Stats -->
+      <section class="section">
+        <h3 class="section-title">Weekly Stats</h3>
+        <div class="stats-row">
+          <div class="stat-card">
+            <span class="stat-num" id="statWorkouts">0</span>
+            <span class="stat-lbl">Workouts</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="statMinutes">0</span>
+            <span class="stat-lbl">Minutes</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="statExercises">0</span>
+            <span class="stat-lbl">Exercises</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- YouTube Music -->
+      <section class="section">
+        <a class="ytmusic-btn" href="https://music.youtube.com/search?q=workout+music" target="_blank" rel="noopener noreferrer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#FF0000"><path d="M12 0C5.376 0 0 5.376 0 12s5.376 12 12 12 12-5.376 12-12S18.624 0 12 0zm0 19.104c-3.924 0-7.104-3.18-7.104-7.104S8.076 4.896 12 4.896s7.104 3.18 7.104 7.104-3.18 7.104-7.104 7.104zm0-11.352c-2.34 0-4.248 1.908-4.248 4.248S9.66 16.248 12 16.248s4.248-1.908 4.248-4.248S14.34 7.752 12 7.752zM9.6 15V9l6 3-6 3z"/></svg>
+          <span>Workout Music</span>
+        </a>
+      </section>
+    </div>
+
+    <!-- ========== TAB: EXPLORE ========== -->
+    <div class="tab-page" id="page-explore">
+      <header class="page-header">
+        <h1>Exercises</h1>
+        <p class="page-sub">Browse all exercises by muscle group</p>
+      </header>
+
+      <div class="filter-pills" id="filterPills">
+        <button class="pill active" data-filter="all">All</button>
+        <button class="pill" data-filter="chest">Chest</button>
+        <button class="pill" data-filter="back">Back</button>
+        <button class="pill" data-filter="legs">Legs</button>
+        <button class="pill" data-filter="shoulders">Shoulders</button>
+        <button class="pill" data-filter="arms">Arms</button>
+        <button class="pill" data-filter="core">Core</button>
+        <button class="pill" data-filter="cardio">Cardio</button>
+        <button class="pill" data-filter="recovery">Recovery</button>
+      </div>
+
+      <div class="exercise-list" id="exerciseList"></div>
+    </div>
+
+    <!-- ========== TAB: TRAIN (Active Workout) ========== -->
+    <div class="tab-page" id="page-train">
+      <!-- Pre-workout: select day -->
+      <div class="train-select" id="trainSelect">
+        <header class="page-header">
+          <h1>Train</h1>
+          <p class="page-sub">Choose your workout</p>
+        </header>
+        <div class="train-day-list" id="trainDayList"></div>
+      </div>
+
+      <!-- Active workout mode -->
+      <div class="train-active hidden" id="trainActive">
+        <div class="train-top-bar">
+          <button class="train-back" id="trainBack">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="train-title-area">
+            <h2 class="train-day-title" id="trainDayTitle">Chest & Triceps</h2>
+            <p class="train-progress-text" id="trainProgressText">Exercise 1 of 7</p>
+          </div>
+          <div class="train-timer" id="trainTimer">00:00</div>
+        </div>
+
+        <!-- Current exercise -->
+        <div class="train-exercise-card" id="trainExCard">
+          <div class="train-ex-anim" id="trainExAnim"></div>
+          <h3 class="train-ex-name" id="trainExName">Barbell Bench Press</h3>
+          <p class="train-ex-detail" id="trainExDetail">4 x 8-10</p>
+          <p class="train-ex-muscle" id="trainExMuscle">Chest</p>
+        </div>
+
+        <!-- Set tracker -->
+        <div class="set-tracker" id="setTracker"></div>
+
+        <!-- Rest timer -->
+        <div class="rest-overlay hidden" id="restOverlay">
+          <div class="rest-content">
+            <p class="rest-label">REST</p>
+            <div class="rest-timer" id="restTimerDisplay">60</div>
+            <p class="rest-sub">Next exercise loading...</p>
+            <button class="btn-skip-rest" id="btnSkipRest">Skip Rest</button>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="train-controls">
+          <button class="btn-prev-ex" id="btnPrevEx">Previous</button>
+          <button class="btn-next-ex" id="btnNextEx">Next Exercise</button>
+        </div>
+
+        <!-- Finish overlay -->
+        <div class="finish-overlay hidden" id="finishOverlay">
+          <div class="finish-content">
+            <div class="finish-check">&#10003;</div>
+            <h2>Workout Complete!</h2>
+            <div class="finish-stats">
+              <div><span class="finish-num" id="finishTime">0</span><br>minutes</div>
+              <div><span class="finish-num" id="finishEx">0</span><br>exercises</div>
+              <div><span class="finish-num" id="finishSets">0</span><br>sets</div>
+            </div>
+            <button class="btn-finish-done" id="btnFinishDone">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== TAB: PROGRESS ========== -->
+    <div class="tab-page" id="page-progress">
+      <header class="page-header">
+        <h1>Progress</h1>
+        <p class="page-sub">Track your journey</p>
+      </header>
+
+      <!-- Big ring -->
+      <div class="progress-hero">
+        <div class="progress-ring-wrap">
+          <svg class="progress-ring-lg" width="180" height="180">
+            <circle class="ring-bg" cx="90" cy="90" r="78" />
+            <circle class="ring-fill" cx="90" cy="90" r="78" id="progressRingLg" />
+          </svg>
+          <div class="ring-center">
+            <span class="ring-num" id="ringNum">0</span>
+            <span class="ring-label">of 7</span>
+          </div>
+        </div>
+        <p class="progress-hero-sub">workouts completed this week</p>
+      </div>
+
+      <!-- Weekly dots -->
+      <div class="week-dots" id="weekDots"></div>
+
+      <!-- History -->
+      <section class="section">
+        <h3 class="section-title">Workout History</h3>
+        <div class="history-list" id="historyList">
+          <p class="empty-state">Complete workouts to see your history here.</p>
+        </div>
+      </section>
+
+      <!-- Personal Records -->
+      <section class="section">
+        <h3 class="section-title">Stats</h3>
+        <div class="stats-row">
+          <div class="stat-card">
+            <span class="stat-num" id="prTotalWorkouts">0</span>
+            <span class="stat-lbl">Total Workouts</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="prTotalMinutes">0</span>
+            <span class="stat-lbl">Total Minutes</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="prBestStreak">0</span>
+            <span class="stat-lbl">Best Streak</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== TAB: PROFILE ========== -->
+    <div class="tab-page" id="page-profile">
+      <header class="page-header">
+        <h1>Profile</h1>
+      </header>
+
+      <div class="profile-card">
+        <img src="icons/IMG_0811.jpeg" alt="" class="profile-avatar" />
+        <h2 class="profile-name" id="profileName">Tyler</h2>
+        <div class="profile-badges">
+          <span class="profile-badge" id="profileLevel">Advanced</span>
+          <span class="profile-badge" id="profileGoal">Build Muscle</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h4 class="settings-title">Settings</h4>
+
+        <div class="setting-row">
+          <span>Name</span>
+          <input type="text" class="setting-input" id="settingName" placeholder="Tyler" maxlength="20" />
+        </div>
+        <div class="setting-row">
+          <span>Fitness Level</span>
+          <select class="setting-select" id="settingLevel">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced" selected>Advanced</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <span>Goal</span>
+          <select class="setting-select" id="settingGoal">
+            <option value="muscle">Build Muscle</option>
+            <option value="strength">Get Strong</option>
+            <option value="endurance">Endurance</option>
+            <option value="lose-fat">Lose Fat</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <span>Rest Timer (seconds)</span>
+          <input type="number" class="setting-input" id="settingRest" value="60" min="15" max="180" step="5" />
+        </div>
+        <button class="btn-save-settings" id="btnSaveSettings">Save Settings</button>
+      </div>
+
+      <div class="settings-group">
+        <h4 class="settings-title danger">Danger Zone</h4>
+        <button class="btn-reset" id="btnResetAll">Reset All Progress</button>
+      </div>
+
+      <footer class="app-footer">
+        <p>GO TYLER &mdash; Built for those who show up.</p>
+      </footer>
+    </div>
+
+    <!-- ========== BOTTOM NAV ========== -->
+    <nav class="bottom-nav" id="bottomNav">
+      <button class="nav-tab active" data-tab="coach">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Coach</span>
+      </button>
+      <button class="nav-tab" data-tab="explore">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Explore</span>
+      </button>
+      <button class="nav-tab train-tab" data-tab="train">
+        <div class="train-icon-wrap">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <span>Train</span>
+      </button>
+      <button class="nav-tab" data-tab="progress">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>Progress</span>
+      </button>
+      <button class="nav-tab" data-tab="profile">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profile</span>
+      </button>
+    </nav>
+
+  </div>
 
   <script src="app.js"></script>
 </body>
