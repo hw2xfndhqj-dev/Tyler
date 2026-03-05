@@ -357,6 +357,15 @@ function renderCoach() {
   document.getElementById('todayIntensity').textContent = w.intensity;
   document.getElementById('todayExCount').textContent = w.exercises.length + ' exercises';
 
+  // Animation strip for today's exercises
+  const strip = document.getElementById('todayAnimStrip');
+  strip.innerHTML = w.exercises.map(ex => `
+    <div class="today-anim-item">
+      <div class="today-anim-box">${getExerciseAnim(ex.name)}</div>
+      <div class="today-anim-label">${ex.name}</div>
+    </div>
+  `).join('');
+
   // Today progress
   const exDone = getExDone(today);
   const pct = Math.round((exDone.length / w.exercises.length) * 100);
